@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{84638EF7-9EB2-43E1-AA7C-9A8E93CF5D45}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ServerAssembly</RootNamespace>
+    <AssemblyName>ServerAssembly</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.4.5.2\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="engine\Algorithms.cs" />
+    <Compile Include="engine\Data.cs" />
+    <Compile Include="engine\Data_Control.cs" />
+    <Compile Include="engine\Execute.cs" />
+    <Compile Include="engine\Execute_Control.cs" />
+    <Compile Include="engine\Framework.cs" />
+    <Compile Include="engine\GameInstance\Arena.cs" />
+    <Compile Include="engine\GameInstance\Game_Instance.cs" />
+    <Compile Include="engine\GameInstance\Map_Default.cs" />
+    <Compile Include="engine\Global.cs" />
+    <Compile Include="engine\Input.cs" />
+    <Compile Include="engine\Input_Control.cs" />
+    <Compile Include="engine\Input_Instance.cs" />
+    <Compile Include="engine\Input_Instance_Control.cs" />
+    <Compile Include="engine\IO_ListenRespond.cs" />
+    <Compile Include="engine\IO_ListenRespond_Control.cs" />
+    <Compile Include="engine\Output.cs" />
+    <Compile Include="engine\Output_Control.cs" />
+    <Compile Include="engine\Output_Instance.cs" />
+    <Compile Include="engine\Output_Instance_Control.cs" />
+    <Compile Include="engine\Server.cs" />
+    <Compile Include="engine\user_praise_files\Praise0_Algorithm.cs" />
+    <Compile Include="engine\user_praise_files\Praise0_Input.cs" />
+    <Compile Include="engine\user_praise_files\Praise0_Output.cs" />
+    <Compile Include="engine\user_praise_files\Praise1_Algorithm.cs" />
+    <Compile Include="engine\user_praise_files\Praise1_Input.cs" />
+    <Compile Include="engine\user_praise_files\Praise1_Output.cs" />
+    <Compile Include="engine\user_praise_files\User_Alg.cs" />
+    <Compile Include="engine\user_praise_files\User_I.cs" />
+    <Compile Include="engine\user_praise_files\User_O.cs" />
+    <Compile Include="Florence_Server.cs" />
+    <Compile Include="graphics\Cameras\FirstPersonCamera.cs" />
+    <Compile Include="graphics\Cameras\ICamera.cs" />
+    <Compile Include="graphics\Cameras\StaticCamera.cs" />
+    <Compile Include="graphics\Cameras\ThirdPersonCamera.cs" />
+    <Compile Include="graphics\GameObjectFactory.cs" />
+    <Compile Include="graphics\GameObjects\AGameObject.cs" />
+    <Compile Include="graphics\GameObjects\Asteroid.cs" />
+    <Compile Include="graphics\GameObjects\Bullet.cs" />
+    <Compile Include="graphics\GameObjects\GameOverCube.cs" />
+    <Compile Include="graphics\GameObjects\Spacecraft.cs" />
+    <Compile Include="graphics\GameObjects\TestObject.cs" />
+    <Compile Include="graphics\IcoSphereFactory.cs" />
+    <Compile Include="graphics\MainWindow.cs" />
+    <Compile Include="graphics\Renderables\ARenderable.cs" />
+    <Compile Include="graphics\Renderables\ColoredRenderObject.cs" />
+    <Compile Include="graphics\Renderables\ColoredVertex.cs" />
+    <Compile Include="graphics\Renderables\MipMapGeneratedRenderObject.cs" />
+    <Compile Include="graphics\Renderables\MipMapManualRenderObject.cs" />
+    <Compile Include="graphics\Renderables\TexturedRenderObject.cs" />
+    <Compile Include="graphics\Renderables\TexturedVertex.cs" />
+    <Compile Include="graphics\RenderObjectFactory.cs" />
+    <Compile Include="graphics\ShaderProgram.cs" />
+    <Compile Include="Networking_Server.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValveSockets.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="graphics\Textures\asteroid texture one side mipmap levels 0 to 8.pdn" />
+    <None Include="graphics\Textures\gameover.pdn" />
+    <None Include="graphics\Textures\sixsided.pdn" />
+    <None Include="graphics\Textures\spacecraft.pdn" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="abseil_dll.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GameNetworkingSockets.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="graphics\Shaders\1Vert\simplePipeTexVert.c" />
+    <Content Include="graphics\Shaders\1Vert\simplePipeVert.c" />
+    <Content Include="graphics\Shaders\5Frag\simplePipeFrag.c" />
+    <Content Include="graphics\Shaders\5Frag\simplePipeTexFrag.c" />
+    <Content Include="graphics\Textures\asteroid texture one side mipmap levels 0 to 8.bmp" />
+    <Content Include="graphics\Textures\asteroid texture one side.jpg" />
+    <Content Include="graphics\Textures\asteroid.bmp" />
+    <Content Include="graphics\Textures\dotted.png" />
+    <Content Include="graphics\Textures\dotted2.png" />
+    <Content Include="graphics\Textures\gameover.png" />
+    <Content Include="graphics\Textures\golden.bmp" />
+    <Content Include="graphics\Textures\moonmap1k.jpg" />
+    <Content Include="graphics\Textures\pinkframe.bmp" />
+    <Content Include="graphics\Textures\sixsided.png" />
+    <Content Include="graphics\Textures\spacecraft.png" />
+    <Content Include="graphics\Textures\wooden texture mipmap levels 0 to 8.jpg" />
+    <Content Include="graphics\Textures\wooden.png" />
+    <Content Include="include\Algorithms.h" />
+    <Content Include="include\Concurrent.h" />
+    <Content Include="include\ConcurrentQue_Server_Framework.h" />
+    <Content Include="include\ConcurrentQue_Server_Global.h" />
+    <Content Include="include\ConcurrentQue_Server_LaunchConcurrency.h" />
+    <Content Include="include\ConcurrentQue_Server_LaunchConcurrency_Control.h" />
+    <Content Include="include\Concurrent_Control.h" />
+    <Content Include="include\Data.h" />
+    <Content Include="include\Data_Control.h" />
+    <Content Include="include\Execute.h" />
+    <Content Include="include\Execute_Control.h" />
+    <Content Include="include\framework.h" />
+    <Content Include="include\Framework_Server.h" />
+    <Content Include="include\Global.h" />
+    <Content Include="include\Input.h" />
+    <Content Include="include\Input_Control.h" />
+    <Content Include="include\Output.h" />
+    <Content Include="include\Output_Control.h" />
+    <Content Include="include\pch.h" />
+    <Content Include="include\Praise0_Algorithm.h" />
+    <Content Include="include\Praise0_Input.h" />
+    <Content Include="include\Praise0_Output.h" />
+    <Content Include="include\Praise1_Algorithm.h" />
+    <Content Include="include\Praise1_Input.h" />
+    <Content Include="include\Praise1_Output.h" />
+    <Content Include="include\Praise2_Algorithm.h" />
+    <Content Include="include\Praise2_Input.h" />
+    <Content Include="include\Praise2_Output.h" />
+    <Content Include="include\Server.h" />
+    <Content Include="include\steam\isteamnetworkingmessages.h" />
+    <Content Include="include\steam\isteamnetworkingsockets.h" />
+    <Content Include="include\steam\isteamnetworkingutils.h" />
+    <Content Include="include\steam\steamclientpublic.h" />
+    <Content Include="include\steam\steamnetworkingcustomsignaling.h" />
+    <Content Include="include\steam\steamnetworkingsockets.h" />
+    <Content Include="include\steam\steamnetworkingsockets_flat.h" />
+    <Content Include="include\steam\steamnetworkingtypes.h" />
+    <Content Include="include\steam\steamtypes.h" />
+    <Content Include="include\steam\steamuniverse.h" />
+    <Content Include="include\steam\steam_api_common.h" />
+    <Content Include="include\User_Alg.h" />
+    <Content Include="include\User_I.h" />
+    <Content Include="include\User_O.h" />
+    <Content Include="include\WriteEnable_Stack_Server_InputAction.h" />
+    <Content Include="include\WriteEnable_Stack_Server_InputAction_Control.h" />
+    <Content Include="include\WriteEnable_Stack_Server_InputAction_Framework.h" />
+    <Content Include="include\WriteEnable_Stack_Server_InputAction_Global.h" />
+    <Content Include="include\WriteEnable_Stack_Server_OutputRecieve.h" />
+    <Content Include="include\WriteEnable_Stack_Server_OutputRecieve_Control.h" />
+    <Content Include="include\WriteEnable_Stack_Server_OutputRecieve_Framework.h" />
+    <Content Include="include\WriteEnable_Stack_Server_OutputRecieve_Global.h" />
+    <Content Include="libcrypto-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libprotobufd.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ServerLibrary.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
