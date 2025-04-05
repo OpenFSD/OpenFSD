@@ -1,4 +1,4 @@
-# Full Stack Development Template.
+# Full Stack Development Template - Client and Server Assemblies.
 ## Florence_ServerAssembly.
 
 Server Assembly For Full Stack Development.
