@@ -179,17 +179,6 @@
     <Content Include="include\steam\steamtypes.h" />
     <Content Include="include\steam\steamuniverse.h" />
     <Content Include="include\steam\steam_api_common.h" />
-    <Content Include="include\valve\steam\isteamnetworkingmessages.h" />
-    <Content Include="include\valve\steam\isteamnetworkingsockets.h" />
-    <Content Include="include\valve\steam\isteamnetworkingutils.h" />
-    <Content Include="include\valve\steam\steamclientpublic.h" />
-    <Content Include="include\valve\steam\steamnetworkingcustomsignaling.h" />
-    <Content Include="include\valve\steam\steamnetworkingsockets.h" />
-    <Content Include="include\valve\steam\steamnetworkingsockets_flat.h" />
-    <Content Include="include\valve\steam\steamnetworkingtypes.h" />
-    <Content Include="include\valve\steam\steamtypes.h" />
-    <Content Include="include\valve\steam\steamuniverse.h" />
-    <Content Include="include\valve\steam\steam_api_common.h" />
     <Content Include="include\write_enable\framework.h" />
     <Content Include="include\write_enable\pch.h" />
     <Content Include="include\write_enable\WriteEnable_Stack_Server_OutputRecieve.h" />
