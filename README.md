@@ -16,8 +16,6 @@ Version 17.13.4
 
 ## Copendencies.
 ### Florence Client Assembly.
- - https://github.com/OpenFSD/Florence_ClientAssembly
-
 
 ## Dependencies.
 ### Server Library.
