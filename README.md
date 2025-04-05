@@ -10,9 +10,9 @@ Edition: Windows 11 Home OEM System Builder
 
 Version: 24H2
 
-### Using Microsoft Visual Studio Professional 2022 (64-bit).
+### Using Microsoft Visual Studio Professional 2019.
 
-Version 17.13.4
+Version 16.11.45
 
 ## Copendencies.
 ### Florence Client Assembly.
