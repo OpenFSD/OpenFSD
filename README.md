@@ -16,6 +16,7 @@ Version 17.13.4
 
 ## Copendencies.
 ### Florence Client Assembly.
+### Florence Server Assembly.
 
 ## Dependencies.
 ### Server Library.
