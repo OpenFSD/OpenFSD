@@ -19,14 +19,18 @@ Version 17.13.4
 
 ## Dependencies.
 ### Server Library.
- - https://github.com/OpenFSD/ServerAssembly_lib
+ - https://github.com/OpenFSD/ServerLibrary
    
-### WriteEnableForStacks.
- - https://github.com/OpenFSD/Wait-WriteEnableForStackEvent_lib
-
-### WaitLaunchConcurrentThread.
- - https://github.com/OpenFSD/Wait-LaunchNextFreeConcurrentThread_lib
-
+### WriteEnableForThreadsAtStacks.
+ - https://github.com/OpenFSD/WriteEnableForThreadsAtStacks
+#### Similar Repositiry.
+ - https://github.com/cameron314/readerwriterqueue
+   
+### LaunchEnableForConcurrentThreadsAtEnds
+ - https://github.com/OpenFSD/LaunchEnableForConcurrentThreadsAtEnds
+#### Similar Repositiry.
+ - https://github.com/cameron314/concurrentqueue
+   
 ### Valve Software.
 - https://github.com/ValveSoftware/GameNetworkingSockets
 - https://github.com/ValveSoftware/GameNetworkingSockets/blob/master/BUILDING.md
