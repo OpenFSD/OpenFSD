@@ -22,12 +22,12 @@ namespace Florence.ClientAssembly
             Florence.Concurrency.ConcurrentQue_Client.Create_ConcurrentQue();
             
             Florence.WriteEnable.Stack_Client_OutputRecieve.Create_WriteEnable();
-
-            //Florence.NetworkingClient.Networking.CreateNetworkingClient();
-           // StringBuilder errorMessage = new StringBuilder(1024);//ToDo
-            //Valve.Sockets.NetworkingIdentity indentiy = Florence.NetworkingClient.Networking.Get_Identity();//ToDo
-            //Valve.Sockets.Library.Initialize(ref indentiy, errorMessage);//ToDo
-
+/*
+            Valve.Sockets.Library.Initialize();
+            Valve.Sockets.Library.Initialize(new StringBuilder(1024));
+            Valve.Sockets.NetworkingIdentity networkingIdentity = new Valve.Sockets.NetworkingIdentity();
+            Valve.Sockets.Library.Initialize(ref networkingIdentity, new StringBuilder(1024));
+*/
             Framework.GetClient().GetExecute().Create_And_Run_Graphics();//ToDo re enable
 
             System.Console.WriteLine("Florence.ClientAssembly: Framework");//TEST

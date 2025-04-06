@@ -51,7 +51,7 @@ namespace Florence.ClientAssembly
 
         public void Create_And_Run_Graphics()
         {
-            //new Florence.ServerAssembly.Graphics.MainWindow().Run(60);//ToDo
+            new Florence.ServerAssembly.Graphics.MainWindow().Run(60);
         }
 
         public Florence.ClientAssembly.Execute_Control GetExecute_Control()

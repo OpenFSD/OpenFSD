@@ -23,8 +23,6 @@ namespace Florence.ServerAssembly
 
             //Florence.ServerAssembly.Framework.GetGameServer().GetExecute().Create_And_Run_Graphics();
 
-            //ToDo
-
             System.Console.WriteLine("skipped => Valve.Networking()");//TestBench
         }
 

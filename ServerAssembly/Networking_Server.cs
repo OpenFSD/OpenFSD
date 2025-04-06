@@ -7,25 +7,24 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Valve.Sockets;
 
 namespace Valve
 {
     public class Networking
     {
         static private Valve.Sockets.NetworkingIdentity identity;
-        static private uint connection;
         static private Valve.Sockets.NetworkingSockets server = null;
         static private Valve.Sockets.NetworkingMessage netMessage;
 
         public Networking()
         {
-            server = new Valve.Sockets.NetworkingSockets();
             netMessage = new Valve.Sockets.NetworkingMessage();
         }
 
         static public void CreateNetworkingServer()
         {
-            Valve.Sockets.NetworkingSockets server = new Valve.Sockets.NetworkingSockets();
+            server = new Valve.Sockets.NetworkingSockets();
 
             uint pollGroup = server.CreatePollGroup();
 
@@ -58,7 +57,7 @@ namespace Valve
 
             Valve.Sockets.Address address = new Valve.Sockets.Address();
 
-            address.SetAddress(Valve.Networking.Get_Local_IPAddress(), 3074);//ToDo
+            address.SetAddress(Valve.Networking.Get_Local_IPAddress(), 3074);
 
             uint listenSocket = server.CreateListenSocket(ref address);
 
@@ -102,7 +101,12 @@ namespace Valve
         public static void CreateAndSendNewMessage()
         {
             byte[] data = new byte[64];
-            server.SendMessageToConnection(connection, data);//todo
+
+            Address address = new Address();
+            address.SetAddress("192.168.8.2", 3074);//todo
+            uint connection = server.Connect(ref address);
+
+            server.SendMessageToConnection(connection, data);
         }
 
         public static void CopyPayloadFromMessage()
@@ -150,11 +154,6 @@ namespace Valve
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        public static uint Get_Connection()
-        {
-            return connection;
         }
     }
 }
