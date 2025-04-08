@@ -12,6 +12,7 @@ Version: 24H2
 ### Using Microsoft Visual Studio Professional 2019.
 
 Version 16.11.45
+ - https://learn.microsoft.com/en-us/visualstudio/releases/2019/history#installing-an-earlier-release
 
 ## Copendencies.
 ### Florence Client Assembly.
