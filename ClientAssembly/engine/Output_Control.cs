@@ -21,12 +21,17 @@ namespace Florence.ClientAssembly.Outputs
             switch (praiseEventId)
             {
                 case 0:
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetOutput_Instnace().GetBuffer_BackOutputDouble().SetInputBufferSubSet(Framework.GetClient().GetData().GetUserIO().GetPraise1_Input());
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetOutput_Instnace().GetBuffer_BackOutputDouble().SetInputBufferSubSet(Framework.GetClient().GetData().GetUserI().GetPraise0_Input());
                     break;
 
                 case 1:
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetOutput_Instnace().GetBuffer_BackOutputDouble().SetInputBufferSubSet(Framework.GetClient().GetData().GetUserIO().GetPraise0_Input());
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetOutput_Instnace().GetBuffer_BackOutputDouble().SetInputBufferSubSet(Framework.GetClient().GetData().GetUserI().GetPraise1_Input());
                     break;
+
+                case 2:
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetOutput_Instnace().GetBuffer_BackOutputDouble().SetInputBufferSubSet(Framework.GetClient().GetData().GetUserI().GetPraise2_Input());
+                    break;
+
             }
         }
     }

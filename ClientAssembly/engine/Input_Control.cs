@@ -38,18 +38,15 @@ namespace Florence.ClientAssembly.Inputs
             switch (praiseEventId)
             {
                 case 0:
-                    Florence.ClientAssembly.Praise_Files.Praise0_Input obj_praise0 = (Florence.ClientAssembly.Praise_Files.Praise0_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise0_Input();
-                    Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().Set_InputBuffer_SubSet(obj_praise0);
+                    Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Set_InputBuffer_SubSet(Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise0_Input());
                     break;
 
                 case 1:
-                    Florence.ClientAssembly.Praise_Files.Praise1_Input obj_praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise1_Input();
-                    Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().Set_InputBuffer_SubSet(obj_praise1);
+                    Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Set_InputBuffer_SubSet(Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise1_Input());
                     break;
 
 		        case 2:
-                    Florence.ClientAssembly.Praise_Files.Praise2_Input obj_praise2 = (Florence.ClientAssembly.Praise_Files.Praise2_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise2_Input();
-                    Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().Set_InputBuffer_SubSet(obj_praise2);
+                    Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Set_InputBuffer_SubSet(Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise2_Input());
                     break;
             }
 		}

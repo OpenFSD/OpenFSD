@@ -250,9 +250,6 @@ namespace Florence.ServerAssembly.Graphics
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(2);
                     Florence.ClientAssembly.Praise_Files.Praise2_Input input_subset_Praise2 = (Florence.ClientAssembly.Praise_Files.Praise2_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
-                    input_subset_Praise2.Set_Position_X(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetPlayerPosition().X);
-                    input_subset_Praise2.Set_Position_Y(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetPlayerPosition().Y);
-                    input_subset_Praise2.Set_Position_Z(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetPlayerPosition().Z);
                     if (KeyboardState.IsKeyDown(Key.W)) input_subset_Praise2.Set_Fowards(true);
                     if (KeyboardState.IsKeyDown(Key.S)) input_subset_Praise2.Set_Backwards(true);
                     if (KeyboardState.IsKeyDown(Key.A)) input_subset_Praise2.Set_Left(true);

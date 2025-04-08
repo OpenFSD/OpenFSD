@@ -94,16 +94,40 @@ namespace Valve
             Console.WriteLine("entered => CreateAndSendNewMessage()");//ToDo
             byte[] data = new byte[64];
             data[0] = praiseEventId;
-
+            byte[] bytes;
             switch (praiseEventId)
             {
             case 0:
-   
+                Florence.ClientAssembly.Praise_Files.Praise0_Input input_subset_Praise0 = (Florence.ClientAssembly.Praise_Files.Praise0_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().Get_InputBufferSubset();
+                data[1] = Convert.ToByte(input_subset_Praise0.GetFlag_IsPingActive());
                 break;
 
             case 1:
-
+                Florence.ClientAssembly.Praise_Files.Praise1_Input input_subset_Praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().Get_InputBufferSubset();
+                bytes = BitConverter.GetBytes(input_subset_Praise1.Get_Mouse_X());
+                for (byte index = 0; index < 2; index++)
+                {
+                    data[index + 1] = bytes[index];
+                }
+                bytes = BitConverter.GetBytes(input_subset_Praise1.Get_Mouse_Y());
+                for (byte index = 0; index < 2; index++)
+                {
+                    data[index + 3] = bytes[index];
+                }
                 break;
+
+            case 2:
+                Florence.ClientAssembly.Praise_Files.Praise2_Input input_subset_Praise2 = (Florence.ClientAssembly.Praise_Files.Praise2_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().Get_InputBufferSubset();
+                data[1] = Convert.ToByte(input_subset_Praise2.Get_Fowards());
+                data[2] = Convert.ToByte(input_subset_Praise2.Get_Backwards());
+                data[3] = Convert.ToByte(input_subset_Praise2.Get_Left());
+                data[4] = Convert.ToByte(input_subset_Praise2.Get_Right());
+                bytes = BitConverter.GetBytes(input_subset_Praise2.GetPeriod());
+                for (byte index = 0; index < 2; index++)
+                {
+                    data[index + 5] = bytes[index];
+                }
+                    break;
             }
 
             Address address = new Address();
