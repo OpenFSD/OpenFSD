@@ -8,6 +8,7 @@ namespace Florence.ClientAssembly.Inputs
         {
 
         }
+/*
         public void LoadValuesInToInputSubset(
             ushort praiseEventId,
             float period
@@ -29,7 +30,7 @@ namespace Florence.ClientAssembly.Inputs
                     break;
             }
         }
-
+*/
         public void SelectSetIntputSubset(
             int praiseEventId
         )
@@ -37,15 +38,17 @@ namespace Florence.ClientAssembly.Inputs
             switch (praiseEventId)
             {
                 case 0:
+                    Florence.ClientAssembly.Praise_Files.Praise0_Input obj_praise0 = (Florence.ClientAssembly.Praise_Files.Praise0_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise0_Input();
+                    Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().Set_InputBuffer_SubSet(obj_praise0);
                     break;
 
                 case 1:
-                    Florence.ClientAssembly.Praise_Files.Praise1_Input obj_praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Framework.GetClient().GetData().GetUserIO().GetPraise0_Input();
+                    Florence.ClientAssembly.Praise_Files.Praise1_Input obj_praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise1_Input();
                     Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().Set_InputBuffer_SubSet(obj_praise1);
                     break;
 
 		        case 2:
-                    Florence.ClientAssembly.Praise_Files.Praise2_Input obj_praise2 = (Florence.ClientAssembly.Praise_Files.Praise2_Input)Framework.GetClient().GetData().GetUserIO().GetPraise1_Input();
+                    Florence.ClientAssembly.Praise_Files.Praise2_Input obj_praise2 = (Florence.ClientAssembly.Praise_Files.Praise2_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetUserI().GetPraise2_Input();
                     Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().Set_InputBuffer_SubSet(obj_praise2);
                     break;
             }

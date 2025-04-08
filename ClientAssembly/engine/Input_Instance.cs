@@ -8,7 +8,6 @@ namespace Florence.ClientAssembly.Inputs
         static private Florence.ClientAssembly.Inputs.Input_Instance_Control inputInstance_Control;
         static private Florence.ClientAssembly.Inputs.Input empty_InputBuffer;
         static private Florence.ClientAssembly.Inputs.Input[] inputDoubleBuffer;
-        static private Florence.ClientAssembly.Inputs.Input transmitInputBuffer;
 
         public Input_Instance() 
         {
@@ -25,9 +24,6 @@ namespace Florence.ClientAssembly.Inputs
                 inputDoubleBuffer[index] = empty_InputBuffer;
                 while (inputDoubleBuffer[index] == null) { /* Wait while is created */ }
             }
-
-            transmitInputBuffer = new Florence.ClientAssembly.Inputs.Input();
-            while (transmitInputBuffer == null) { /* Wait while is created */ }
         }
 
         private UInt16 BoolToInt16(bool value)
@@ -61,11 +57,6 @@ namespace Florence.ClientAssembly.Inputs
         public Florence.ClientAssembly.Inputs.Input_Instance_Control GetInputInstance_Control()
         {
             return inputInstance_Control;
-        }
-
-        public Florence.ClientAssembly.Inputs.Input Get_Transmit_InputBuffer()
-        {
-            return transmitInputBuffer;
         }
 
         public void SetBuffer_Input(Florence.ClientAssembly.Inputs.Input value)

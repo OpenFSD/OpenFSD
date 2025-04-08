@@ -11,6 +11,10 @@ namespace Florence.ClientAssembly.Praise_Files
         static private float position_X;
         static private float position_Y;
         static private float position_Z;
+        static private bool _fowards;
+        static private bool _backwards;
+        static private bool _left;
+        static private bool _right;
         static private float period;
 
         public Praise2_Input()
@@ -21,6 +25,22 @@ namespace Florence.ClientAssembly.Praise_Files
             period = 0;
         }
 
+        public bool Get_Propergation()
+        {
+            return _fowards;
+        }
+        public bool Get_Sidewayes()
+        {
+            return _backwards;
+        }
+        public bool Get_Left()
+        {
+            return _left;
+        }
+        public bool Get_Right()
+        {
+            return _right;
+        }
         public float Get_Position_X() 
         {   
             return position_X; 
@@ -40,7 +60,24 @@ namespace Florence.ClientAssembly.Praise_Files
         {
             return period;
         }
-        
+
+        public void Set_Fowards(bool value)
+        {
+            _fowards = value;
+        }
+        public void Set_Backwards(bool value)
+        {
+            _backwards = value;
+        }
+        public void Set_Left(bool value)
+        {
+            _left = value;
+        }
+        public void Set_Right(bool value)
+        {
+            _right = value;
+        }
+
         public void Set_Position_X(float value) 
         {
             position_X = value;

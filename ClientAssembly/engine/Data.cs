@@ -17,7 +17,7 @@ namespace Florence.ClientAssembly
         //stack        
         static private List<Florence.ClientAssembly.Outputs.Output> stack_Client_OutputRecieves;
         //praises
-        static private Florence.ClientAssembly.Praise_Files.User_I user_IO;
+        static private Florence.ClientAssembly.Praise_Files.User_I user_I;
 
         static private bool state_Buffer_Input_ToWrite;
         static private bool state_Buffer_Output_ToWrite;
@@ -41,8 +41,8 @@ namespace Florence.ClientAssembly
             stack_Client_OutputRecieves = new List<Florence.ClientAssembly.Outputs.Output>();
             while (stack_Client_OutputRecieves == null) { /* Wait while is created */ }
 
-            user_IO = new Florence.ClientAssembly.Praise_Files.User_I();
-            while (user_IO == null) { /* Wait while is created */ }
+            user_I = new Florence.ClientAssembly.Praise_Files.User_I();
+            while (user_I == null) { /* Wait while is created */ }
 
             state_Buffer_Input_ToWrite = true;
             state_Buffer_Output_ToWrite = false;
@@ -103,9 +103,9 @@ namespace Florence.ClientAssembly
             return stack_Client_OutputRecieves;
         }
 
-        public Florence.ClientAssembly.Praise_Files.User_I GetUserIO()
+        public Florence.ClientAssembly.Praise_Files.User_I GetUserI()
         {
-            return user_IO;
+            return user_I;
         }
     }
 }

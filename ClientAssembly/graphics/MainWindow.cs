@@ -26,6 +26,7 @@ namespace Florence.ServerAssembly.Graphics
         private ShaderProgram _texturedProgram;
         private ShaderProgram _solidProgram;
         private KeyboardState _lastKeyboardState;
+        private MouseState mouseState;
         private Spacecraft _player;
         private int _score;
         private bool _gameOver;
@@ -190,15 +191,15 @@ namespace Florence.ServerAssembly.Graphics
         private void HandleKeyboard(double dt)
         {
             var KeyboardState = Keyboard.GetState();
-
+            mouseState = new MouseState();
             if (done_once == true)
             {
                 Florence.ClientAssembly.Framework.GetClient().GetExecute().GetExecute_Control().SetFlag_ThreadInitialised(0, false);
                 System.Console.WriteLine("Thread Initalised => Thread_OnUpdateFrame()");//TestBench
-                done_once = false;
                 System.Console.WriteLine("Thread Starting => Thread_OnUpdateFrame()");//TestBench
+                done_once = false;
             }
-
+            
             float period = (float)dt;
             Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().SetBuffer_Input(Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetEmptyInput());
 
@@ -211,23 +212,29 @@ namespace Florence.ServerAssembly.Graphics
                 if (KeyboardState.IsKeyDown(Key.Enter))//ping
                 {
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(0, true);
-                    // Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().SetPraiseEventId(0);
-                    // Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().GetInputControl().SelectSetIntputSubset(0);
-                    // Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().GetInputControl().LoadValuesInToInputSubset(0, period);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(0);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(0);
+                    Florence.ClientAssembly.Praise_Files.Praise0_Input input_subset_Praise0 = (Florence.ClientAssembly.Praise_Files.Praise0_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
+                    input_subset_Praise0.SetFlag_IsPingActive(true);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
                     //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(0);//todo
                 }
             }
             if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(1) == false)
             {
-                Florence.ClientAssembly.game_Instance.Player in_Subset_praise1 = (Florence.ClientAssembly.game_Instance.Player)Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0);
-                if ((in_Subset_praise1.GetMousePos().X != Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().X)
-                    || (in_Subset_praise1.GetMousePos().Y != Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().Y)
-                )//mouse move
+                
+                
+                if ((mouseState.X != Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().X
+                    || (mouseState.Y != Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().Y
+                )))//mouse move
                 {
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
-                    // Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().SetPraiseEventId(1);
-                    //Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().GetInputControl().SelectSetIntputSubset(1);
-                    //Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().GetInputControl().LoadValuesInToInputSubset(1, period);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(1);
+                    Florence.ClientAssembly.Praise_Files.Praise1_Input input_subset_Praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
+                    input_subset_Praise1.Set_Mouse_X(mouseState.X);
+                    input_subset_Praise1.Set_Mouse_Y(mouseState.Y);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
                     //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(1);//todo
                 }
             }
@@ -240,9 +247,18 @@ namespace Florence.ServerAssembly.Graphics
                 )//player move
                 {
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
-                    //Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().SetPraiseEventId(2);
-                    //Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().GetInputControl().SelectSetIntputSubset(2);
-                    //Framework.GetClient().GetData().GetInput_Instnace().Get_Transmit_InputBuffer().GetInputControl().LoadValuesInToInputSubset(2, period);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(2);
+                    Florence.ClientAssembly.Praise_Files.Praise2_Input input_subset_Praise2 = (Florence.ClientAssembly.Praise_Files.Praise2_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
+                    input_subset_Praise2.Set_Position_X(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetPlayerPosition().X);
+                    input_subset_Praise2.Set_Position_Y(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetPlayerPosition().Y);
+                    input_subset_Praise2.Set_Position_Z(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetPlayerPosition().Z);
+                    if (KeyboardState.IsKeyDown(Key.W)) input_subset_Praise2.Set_Fowards(true);
+                    if (KeyboardState.IsKeyDown(Key.S)) input_subset_Praise2.Set_Backwards(true);
+                    if (KeyboardState.IsKeyDown(Key.A)) input_subset_Praise2.Set_Left(true);
+                    if (KeyboardState.IsKeyDown(Key.D)) input_subset_Praise2.Set_Right(true);
+                    input_subset_Praise2.Set_Period(period);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
                     //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(2);//todo
                 }
             }
