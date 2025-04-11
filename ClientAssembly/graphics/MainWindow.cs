@@ -200,6 +200,15 @@ namespace Florence.ServerAssembly.Graphics
                     || (KeyboardState.IsKeyDown(Key.D))
                 )//player move
                 {
+                    Florence.ClientAssembly.game_Instance.Player player = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player();
+                    Vector4 position = player.Position;
+                    Vector4 foward = player.Get_foward();
+                    Vector4 right = player.Get_right();
+                    Vector4 up = player.Get_up();
+                    if (KeyboardState.IsKeyDown(Key.W)) player.SetPosition(position += position * foward * player.Get_cameraSpeed() * (float)period);
+                    if (KeyboardState.IsKeyDown(Key.S)) player.SetPosition(position -= position * foward * player.Get_cameraSpeed() * (float)period);
+                    if (KeyboardState.IsKeyDown(Key.A)) player.SetPosition(position -= position * right * player.Get_cameraSpeed() * (float)period);
+                    if (KeyboardState.IsKeyDown(Key.D)) player.SetPosition(position += position * right * player.Get_cameraSpeed() * (float)period);
                     /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);

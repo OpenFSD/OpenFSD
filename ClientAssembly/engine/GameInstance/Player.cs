@@ -12,6 +12,9 @@ namespace Florence.ClientAssembly.game_Instance
         private bool isPlayerMoved;
         private bool isMouseChanged;
         private Vector2 mousePos;
+        private Vector4 _foward;
+        private Vector4 _right;
+        private Vector4 _up;
         private ICamera _camera;
         private float cameraSpeed;
         private float sensitivity;
@@ -52,6 +55,31 @@ namespace Florence.ClientAssembly.game_Instance
             return mousePos;
         }
 
+        public Vector4 Get_foward()
+        {
+            return _foward;
+        }
+
+        public Vector4 Get_right()
+        {
+            return _right;
+        }
+
+        public Vector4 Get_up()
+        {
+            return _up;
+        }
+        
+        public float Get_cameraSpeed()
+        {
+            return cameraSpeed;
+        }
+
+        public float Get_sensitivity()
+        {
+            return sensitivity;
+        }
+
         public void Set_Camera()
         {
             _camera = new Florence.ServerAssembly.Graphics.Cameras.StaticCamera();
@@ -70,6 +98,21 @@ namespace Florence.ClientAssembly.game_Instance
         public void Set_MousePos(Vector2 pos)
         {
             Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(pos);
+        }
+
+        public void Set_foward(Vector4 value)
+        {
+            _foward = value;
+        }
+
+        public void Set_right(Vector4 value)
+        {
+            _right = value;
+        }
+
+        public void Set_up(Vector4 value)
+        {
+            _up = value;
         }
     }
 }
