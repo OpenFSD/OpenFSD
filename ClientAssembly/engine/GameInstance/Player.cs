@@ -1,113 +1,76 @@
 ﻿using OpenTK;
-using System;
+using Florence.ServerAssembly.Graphics.Cameras;
+using Florence.ServerAssembly.Graphics.GameObjects;
+using Florence.ServerAssembly.Graphics.Renderables;
 
 namespace Florence.ClientAssembly.game_Instance
 {
-    public class Player
+    public class Player : AGameObject
     {
-       private bool _firstMove = false;
-
-        private bool isPlayerMoved = true;
-        private Vector3 player_Position;
-        //private Vector3 new_Player_Position;
-
-        bool isMouseChanged = false;
+        private bool _firstMove;
+        private bool _firstMouseMove;
+        private bool isPlayerMoved;
+        private bool isMouseChanged;
         private Vector2 mousePos;
-        //private Vector2 new_MousePos;
+        private ICamera _camera;
+        private float cameraSpeed;
+        private float sensitivity;
 
-        const float cameraSpeed = 1.5f;
-        const float sensitivity = 0.2f;
-
-        public Player() 
+        public Player(ARenderable model, Vector4 position, Vector4 direction, Vector4 rotation, float velocity)
+            : base(model, position, direction, rotation, velocity)
         {
             _firstMove = true;
-            //camera = new Florence.ClientAssembly.game_Instance.gFX.Camera(Vector3.UnitZ * 3, 16 / (float)9);
+            _firstMouseMove = true;
+            isPlayerMoved = false;
+            isMouseChanged = false;
+            mousePos = new Vector2(0, 0);
+            _camera = new StaticCamera();
+            cameraSpeed = 1.5f;
+            sensitivity = 0.2f;
+
+            Vector3 offset = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
+            //_camera = new Florence.ServerAssembly.Graphics.Cameras.FirstPersonCamera(this, target, up);
         }
-        public void Move_Backwards(float period)
+
+        public ICamera Get_Camera()
         {
-            //TODO Create praise, push_stack_InputActions
-            //Vector3 temp = camera.Position - (camera.Front * cameraSpeed * period); // Backwards
-            //Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).Set_PlayerPosition(
-            //    temp
-            //);          
+            return _camera;
         }
 
-        public void Move_Fowards(float period)
-        {
-            //TODO Create praise, push_stack_InputActions
-            //Vector3 temp = camera.Position + (camera.Front * cameraSpeed * period);// Forward
-            //Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).Set_PlayerPosition(
-            //    temp
-            //);
-        }
-
-        public void Move_Left(float period)
-        {
-            //TODO Create praise, push_stack_InputActions
-           // Vector3 temp = camera.Position - (camera.Right * cameraSpeed * period);// Left
-           // Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).Set_PlayerPosition(
-            //    temp
-            //);
-        }
-
-        public void Move_Right(float period)
-        {
-            //TODO Create praise, push_stack_InputActions
-            //Vector3 temp = camera.Position + (camera.Right * cameraSpeed * period);// Right
-            //Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).Set_PlayerPosition(
-            //    temp
-            //);
-        }
-
-
-        public bool Get_isFirstMove()
+        public bool Get_IsFirstMove()
         {
             return _firstMove;
         }
-
-        public int GetInt_OfInputBuffer()
+        public bool Get_IsFirstMouseMove()
         {
-            if (Framework.GetClient().GetData().GetState_Buffer_InputPraise_SideToWrite() == false)
-            {
-                return (Int16)0;
-            }
-            else
-            {
-                return (Int32)1;
-            }
+            return _firstMouseMove;
         }
-        public Vector2 GetMousePos()
+        public Vector2 Get_MousePos()
         {
             return mousePos;
         }
-   
-        public Vector3 GetPlayerPosition()
+
+        public void Set_Camera()
         {
-            return player_Position;
+            _camera = new Florence.ServerAssembly.Graphics.Cameras.StaticCamera();
+            while (_camera == null) { }
         }
-     
-        public void Set_isFirstMove(bool value)
+
+        public void Set_IsFirstMove(bool value)
         {
             _firstMove = value;
+        }
+        public void Set_IsFirstMouseMove(bool value)
+        {
+            _firstMouseMove = value;
         }
 
         public void Set_MousePos(Vector2 pos)
         {
-            //TODO Create praise, push_stack_InputActions
-            Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).Set_MousePos(pos);
-            
-            // Calculate the offset of the mouse position
-            var deltaX = Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().X - mousePos.X;
-            var deltaY = Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().Y - mousePos.Y;
-
-            // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
-            //camera.Yaw += deltaX * sensitivity;
-            //camera.Pitch -= deltaY * sensitivity; // Reversed since y-coordinates range from bottom to top
-        }
-
-        public void Set_PlayerPosition(Vector3 position)
-        {
-            player_Position = position;
+            Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(pos);
         }
     }
 }
+

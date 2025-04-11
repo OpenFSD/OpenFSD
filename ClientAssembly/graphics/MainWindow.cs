@@ -17,23 +17,23 @@ namespace Florence.ServerAssembly.Graphics
     {
         private bool done_once;
         private readonly string _title;
-        private GameObjectFactory _gameObjectFactory;
-        private readonly List<AGameObject> _gameObjects = new List<AGameObject>();
+        //private GameObjectFactory _gameObjectFactory;
+        //private readonly List<AGameObject> _gameObjects = new List<AGameObject>();
         private double _time;
         private readonly Color4 _backColor = new Color4(0.1f, 0.1f, 0.3f, 1.0f);
         private Matrix4 _projectionMatrix;
         private float _fov = 45f;
-        private ShaderProgram _texturedProgram;
-        private ShaderProgram _solidProgram;
+        //private ShaderProgram _texturedProgram;
+        //private ShaderProgram _solidProgram;
         private KeyboardState _lastKeyboardState;
         private MouseState mouseState;
-        private Spacecraft _player;
+        //private Spacecraft _player;
         private int _score;
         private bool _gameOver;
         private Bullet.BulletType _bulletType;
         private Bullet _lastBullet;
         private bool _useFirstPerson = true;
-        private ICamera _camera;
+        //private ICamera _camera;
 
         public MainWindow()
             : base(750, // initial width
@@ -60,16 +60,25 @@ namespace Florence.ServerAssembly.Graphics
             Debug.WriteLine("OnLoad");
             VSync = VSyncMode.Off;
             CreateProjection();
+
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Load_Sphere_Solid();
+            /*
             _solidProgram = new ShaderProgram();
             _solidProgram.AddShader(ShaderType.VertexShader, "..\\..\\graphics\\Shaders\\1Vert\\simplePipeVert.c");
             _solidProgram.AddShader(ShaderType.FragmentShader, "..\\..\\graphics\\Shaders\\5Frag\\simplePipeFrag.c");
             _solidProgram.Link();
+            */
 
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Load_Sphere_Textures();
+            /*
             _texturedProgram = new ShaderProgram();
             _texturedProgram.AddShader(ShaderType.VertexShader, "..\\..\\graphics\\Shaders\\1Vert\\simplePipeTexVert.c");
             _texturedProgram.AddShader(ShaderType.FragmentShader, "..\\..\\graphics\\Shaders\\5Frag\\simplePipeTexFrag.c");
             _texturedProgram.Link();
-            
+            */
+
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Load_Models();
+            /*
             var models = new Dictionary<string, ARenderable>();
             models.Add("Wooden", new MipMapGeneratedRenderObject(new IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\wooden.png", 8));
             models.Add("Golden", new MipMapGeneratedRenderObject(new IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\golden.bmp", 8));
@@ -81,16 +90,15 @@ namespace Florence.ServerAssembly.Graphics
             //models.Add("TestObject", new TexturedRenderObject(RenderObjectFactory.CreateTexturedCube(1, 1, 1), _texturedProgram.Id, "..\\..\\graphics\Textures\asteroid texture one side.jpg"));
             //models.Add("TestObjectGen", new MipMapGeneratedRenderObject(RenderObjectFactory.CreateTexturedCube(1, 1, 1), _texturedProgram.Id, "..\\..\\graphics\Textures\asteroid texture one side.jpg", 8));
             //models.Add("TestObjectPreGen", new MipMapManualRenderObject(RenderObjectFactory.CreateTexturedCube(1, 1, 1), _texturedProgram.Id, "..\\..\\graphics\Textures\asteroid texture one side mipmap levels 0 to 8.bmp", 9));
+            */
 
-            _gameObjectFactory = new GameObjectFactory(models);
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Create_gameObjectFactory();
+            //_gameObjectFactory = new GameObjectFactory(models);
 
-            _player = _gameObjectFactory.CreateSpacecraft();
-            _gameObjects.Add(_player);
-            _gameObjects.Add(_gameObjectFactory.CreateAsteroid());
-            _gameObjects.Add(_gameObjectFactory.CreateGoldenAsteroid());
-            _gameObjects.Add(_gameObjectFactory.CreateWoodenAsteroid());
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Create_gameObjects();
 
-            _camera = new StaticCamera();
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Create_PlayerOnClient();
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_Camera();
 
             CursorVisible = true;
 
@@ -111,9 +119,9 @@ namespace Florence.ServerAssembly.Graphics
         public override void Exit()
         {
             Debug.WriteLine("Exit called");
-            _gameObjectFactory.Dispose();
-            _solidProgram.Dispose();
-            _texturedProgram.Dispose();
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Dispose();
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_solidProgram().Dispose();
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_texturedProgram().Dispose();
             base.Exit();
         }
         
@@ -130,61 +138,7 @@ namespace Florence.ServerAssembly.Graphics
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             _time += e.Time;
-            var remove = new HashSet<AGameObject>();
-            var view = new Vector4(0, 0, -2.4f, 0);
-            int removedAsteroids = 0;
-            int outOfBoundsAsteroids = 0;
-            foreach (var item in _gameObjects)
-            {
-                item.Update(_time, e.Time);
-                if (item.ToBeRemoved)
-                    remove.Add(item);
-
-                if (item.GetType() == typeof (Bullet))
-                {
-                    var collide = ((Bullet) item).CheckCollision(_gameObjects);
-                    if (collide != null)
-                    {
-                        remove.Add(item);
-                        if (remove.Add(collide))
-                        {
-                            _score += ((Asteroid)collide).Score;
-                            removedAsteroids++;
-                        }
-                    }
-                }
-                if (item.GetType() == typeof(Spacecraft))
-                {
-                    var collide = ((Spacecraft)item).CheckCollision(_gameObjects);
-                    if (collide != null)
-                    {
-                        foreach (var x in _gameObjects)
-                            remove.Add(x);
-                        _gameObjects.Add(_gameObjectFactory.CreateGameOver());
-                        _gameOver = true;
-                        removedAsteroids = 0;
-                        break;
-                    }
-                }
-            }
-            foreach (var r in remove)
-            {
-                r.ToBeRemoved = true;
-                _gameObjects.Remove(r);
-            }
-            for (int i = 0; i < removedAsteroids; i++)
-            {
-                _gameObjects.Add(_gameObjectFactory.CreateRandomAsteroid());
-            }
-            for (int i = 0; i < outOfBoundsAsteroids; i++)
-            {
-                _gameObjects.Add(_gameObjectFactory.CreateRandomAsteroid());
-            }
-            if (_lastBullet == null || _lastBullet.ToBeRemoved)
-            {
-                _camera = new StaticCamera();
-            }
-            _camera.Update(_time, e.Time);
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_Camera().Update(_time, e.Time);
             HandleKeyboard(e.Time);
         }
 
@@ -211,6 +165,7 @@ namespace Florence.ServerAssembly.Graphics
             {
                 if (KeyboardState.IsKeyDown(Key.Enter))//ping
                 {
+                    /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(0, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(0);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(0);
@@ -218,16 +173,14 @@ namespace Florence.ServerAssembly.Graphics
                     input_subset_Praise0.SetFlag_IsPingActive(true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
                     //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(0);//todo
+                    */
                 }
             }
             if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(1) == false)
             {
-                
-                
-                if ((mouseState.X != Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().X
-                    || (mouseState.Y != Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().GetPlayer(0).GetMousePos().Y
-                )))//mouse move
+                if ((mouseState.X != 0) || (mouseState.Y != 0))//mouse move
                 {
+                    /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(1);
@@ -236,6 +189,7 @@ namespace Florence.ServerAssembly.Graphics
                     input_subset_Praise1.Set_Mouse_Y(mouseState.Y);
                     Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
                     //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(1);//todo
+                    */
                 }
             }
             if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(2) == false)
@@ -246,6 +200,7 @@ namespace Florence.ServerAssembly.Graphics
                     || (KeyboardState.IsKeyDown(Key.D))
                 )//player move
                 {
+                    /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(2);
@@ -257,24 +212,26 @@ namespace Florence.ServerAssembly.Graphics
                     input_subset_Praise2.Set_Period(period);
                     Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
                     //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(2);//todo
+                    */
                 }
             }
             _lastKeyboardState = KeyboardState;
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            Title = $"{_title}: FPS:{1f / e.Time:0000.0}, obj:{_gameObjects.Count}, score:{_score}";
+            Title = $"{_title}: FPS:{1f / e.Time:0000.0}, obj:{Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_GameObjects().Count}, score:{_score}";
             GL.ClearColor(Color.Black);// _backColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             int lastProgram = -1;
-            foreach (var obj in _gameObjects)
+            for (byte index = 0; index < Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_GameObjects().Count(); index++)
             {
-                var program = obj.Model.Program;
+                AGameObject obj = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_GameObjects().ElementAt(index);
+                int program = obj.Model.Program;
                 if (lastProgram != program)
                     GL.UniformMatrix4(20, false, ref _projectionMatrix);
                 lastProgram = obj.Model.Program;
-                obj.Render(_camera);
+                obj.Render(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_Camera());
 
             }
             SwapBuffers();
