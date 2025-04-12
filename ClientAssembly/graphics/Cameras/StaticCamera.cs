@@ -10,7 +10,7 @@ namespace Florence.ServerAssembly.Graphics.Cameras
             Vector3 position;
             position.X = 0;
             position.Y = 0;
-            position.Z = 0;
+            position.Z = 2;
             LookAtMatrix = Matrix4.LookAt(position, -Vector3.UnitZ, Vector3.UnitY);
         }
         public StaticCamera(Vector3 position, Vector3 target)

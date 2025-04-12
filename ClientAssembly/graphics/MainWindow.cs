@@ -180,6 +180,24 @@ namespace Florence.ServerAssembly.Graphics
             {
                 if ((mouseState.X != 0) || (mouseState.Y != 0))//mouse move
                 {
+                    if (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_IsFirstMouseMove()) // This bool variable is initially set to true.
+                    {
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_IsFirstMouseMove(false);
+                    }
+                    else
+                    {
+                        // Calculate the offset of the mouse position
+                        var deltaX = mouseState.X - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().X;
+                        var deltaY = mouseState.Y - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().Y;
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
+
+                        // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_yaw(
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_yaw() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_pitch(
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_pitch() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
+                    }
                     /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
@@ -202,13 +220,13 @@ namespace Florence.ServerAssembly.Graphics
                 {
                     Florence.ClientAssembly.game_Instance.Player player = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player();
                     Vector4 position = player.Position;
-                    Vector4 foward = player.Get_foward();
-                    Vector4 right = player.Get_right();
-                    Vector4 up = player.Get_up();
-                    if (KeyboardState.IsKeyDown(Key.W)) player.SetPosition(position += position * foward * player.Get_cameraSpeed() * (float)period);
-                    if (KeyboardState.IsKeyDown(Key.S)) player.SetPosition(position -= position * foward * player.Get_cameraSpeed() * (float)period);
-                    if (KeyboardState.IsKeyDown(Key.A)) player.SetPosition(position -= position * right * player.Get_cameraSpeed() * (float)period);
-                    if (KeyboardState.IsKeyDown(Key.D)) player.SetPosition(position += position * right * player.Get_cameraSpeed() * (float)period);
+                    Vector4 foward = new Vector4(player.Get_foward().X, player.Get_foward().Y, player.Get_foward().Z, 0);
+                    Vector4 right = new Vector4(player.Get_right().X, player.Get_right().Y, player.Get_right().Z, 0);
+                    Vector4 up = new Vector4(player.Get_up().X, player.Get_up().Y, player.Get_up().Z, 0);
+                    if (KeyboardState.IsKeyDown(Key.W)) player.SetPosition(position += (foward * player.Get_cameraSpeed() * (float)period));
+                    if (KeyboardState.IsKeyDown(Key.S)) player.SetPosition(position -= (foward * player.Get_cameraSpeed() * (float)period));
+                    if (KeyboardState.IsKeyDown(Key.A)) player.SetPosition(position -= (right * player.Get_cameraSpeed() * (float)period));
+                    if (KeyboardState.IsKeyDown(Key.D)) player.SetPosition(position += (right * player.Get_cameraSpeed() * (float)period));
                     /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);

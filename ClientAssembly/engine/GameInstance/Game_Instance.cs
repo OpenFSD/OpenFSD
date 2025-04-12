@@ -46,17 +46,17 @@ namespace Florence.ClientAssembly
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateSpacecraft();
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_SpaceCraft());
             _gameObjects.RemoveAt(0);
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector4(-1f, 0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector4(1f, 0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector4(0, -1f, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector4(0, 1f, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector4(0, 0, -1f, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector4(0, 0, 1f, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector4(-1, 0, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector4(1, 0, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector4(0, -1, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector4(0, 1, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector4(0, 0, -1, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector4(0, 0, 1, 0)));
         }
 
         public void Create_PlayerOnClient()
         {
-            player = new Florence.ClientAssembly.game_Instance.Player(models["Spacecraft"], new Vector4(0, 0, 0, 0), Vector4.Zero, Vector4.Zero, 0);
+            player = new Florence.ClientAssembly.game_Instance.Player(models["Spacecraft"], new Vector4(0, 0, 2, 0), -Vector4.UnitZ, Vector4.Zero, 0);
             while (player == null) { /* Wait while is created */ }
         }
 

@@ -44,6 +44,18 @@ namespace Florence.ServerAssembly.Graphics.Cameras
                 Vector3.UnitY);
         }
 
+        public Vector3 Get_front()
+        {
+            return _front;
+        }
+        public Vector3 Get_up()
+        {
+            return _up;
+        }
+        public Vector3 Get_right()
+        {
+            return _right;
+        }
         public float Get_pitch()
         {
             return _pitch;
@@ -53,6 +65,18 @@ namespace Florence.ServerAssembly.Graphics.Cameras
             return _yaw;
         }
 
+        public void Set_front(Vector3 value)
+        {
+            _front = value;
+        }
+        public void Set_up(Vector3 value)
+        {
+            _up = value;
+        }
+        public void Set_right(Vector3 value)
+        {
+            _right = value;
+        }
         public void Set_pitch(float value)
         {
             _pitch = value;
