@@ -9,21 +9,14 @@ namespace Florence.ServerAssembly.Graphics.Cameras
         private readonly AGameObject _target;
         private readonly Vector3 _offset;
 
-        // Those vectors are directions pointing outwards from the camera to define how it rotated.
-        private Vector3 _front = -Vector3.UnitZ;
+        private Vector3 _front;
+        private Vector3 _up;
+        private Vector3 _right;
 
-        private Vector3 _up = Vector3.UnitY;
-
-        private Vector3 _right = Vector3.UnitX;
-
-        // Rotation around the X axis (radians)
         private float _pitch;
+        private float _yaw;
 
-        // Rotation around the Y axis (radians)
-        private float _yaw = -MathHelper.PiOver2; // Without this, you would be started rotated 90 degrees right.
-
-        // The field of view of the camera (radians)
-        private float _fov = MathHelper.PiOver2;
+        private float _fov;
 
         public FirstPersonCamera(AGameObject target)
             : this(target, Vector3.Zero)
@@ -34,6 +27,12 @@ namespace Florence.ServerAssembly.Graphics.Cameras
         {
             _target = target;
             _offset = offset;
+            _front = -Vector3.UnitZ;
+            _up = Vector3.UnitY;
+            _right = Vector3.UnitX;
+            _pitch = 0;
+            _yaw = -MathHelper.PiOver2;
+            _fov = MathHelper.PiOver2;
         }
 
         public void Update(double time, double delta)

@@ -93,7 +93,7 @@ namespace Florence.ClientAssembly.game_Instance
 
         public void Set_Camera()
         {
-            _camera = new Florence.ServerAssembly.Graphics.Cameras.StaticCamera();
+            _camera = new Florence.ServerAssembly.Graphics.Cameras.FirstPersonCamera(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player());
             while (_camera == null) { }
         }
 
