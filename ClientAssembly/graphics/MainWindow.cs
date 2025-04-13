@@ -100,7 +100,7 @@ namespace Florence.ServerAssembly.Graphics
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Create_PlayerOnClient();
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_Camera();
 
-            CursorVisible = true;
+            CursorVisible = false;
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             GL.PatchParameter(PatchParameterInt.PatchVertices, 3);
@@ -140,12 +140,13 @@ namespace Florence.ServerAssembly.Graphics
             _time += e.Time;
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_Camera().Update(_time, e.Time);
             HandleKeyboard(e.Time);
+            HandleMouse();
         }
 
         private void HandleKeyboard(double dt)
         {
             var KeyboardState = Keyboard.GetState();
-            mouseState = new MouseState();
+            
             if (done_once == true)
             {
                 Florence.ClientAssembly.Framework.GetClient().GetExecute().GetExecute_Control().SetFlag_ThreadInitialised(0, false);
@@ -176,40 +177,7 @@ namespace Florence.ServerAssembly.Graphics
                     */
                 }
             }
-            if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(1) == false)
-            {
-                if ((mouseState.X != 0) || (mouseState.Y != 0))//mouse move
-                {
-                    if (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_IsFirstMouseMove()) // This bool variable is initially set to true.
-                    {
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_IsFirstMouseMove(false);
-                    }
-                    else
-                    {
-                        // Calculate the offset of the mouse position
-                        var deltaX = mouseState.X - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().X;
-                        var deltaY = mouseState.Y - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().Y;
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
 
-                        // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_yaw(
-                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_yaw() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_pitch(
-                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_pitch() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
-                    }
-                    /*
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(1);
-                    Florence.ClientAssembly.Praise_Files.Praise1_Input input_subset_Praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
-                    input_subset_Praise1.Set_Mouse_X(mouseState.X);
-                    input_subset_Praise1.Set_Mouse_Y(mouseState.Y);
-                    Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
-                    //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(1);//todo
-                    */
-                }
-            }
             if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(2) == false)
             {
                 if ((KeyboardState.IsKeyDown(Key.W))
@@ -244,6 +212,46 @@ namespace Florence.ServerAssembly.Graphics
             }
             _lastKeyboardState = KeyboardState;
         }
+
+        private void HandleMouse()
+        {
+            var mouseState = new MouseState();
+            if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(1) == false)
+            {
+                if ((mouseState.X != 0) || (mouseState.Y != 0))//mouse move
+                {
+                    if (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_IsFirstMouseMove()) // This bool variable is initially set to true.
+                    {
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_IsFirstMouseMove(false);
+                    }
+                    else
+                    {
+                        // Calculate the offset of the mouse position
+                        var deltaX = mouseState.X - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().X;
+                        var deltaY = mouseState.Y - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().Y;
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
+
+                        // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_yaw(
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_yaw() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_pitch(
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_pitch() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
+                    }
+                    /*
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(1);
+                    Florence.ClientAssembly.Praise_Files.Praise1_Input input_subset_Praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
+                    input_subset_Praise1.Set_Mouse_X(mouseState.X);
+                    input_subset_Praise1.Set_Mouse_Y(mouseState.Y);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
+                    //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(1);//todo
+                    */
+                }
+            }
+        }
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             Title = $"{_title}: FPS:{1f / e.Time:0000.0}, obj:{Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_GameObjects().Count}, score:{_score}";
