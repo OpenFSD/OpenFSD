@@ -26,7 +26,7 @@ namespace Server_Library
             __int8 number_Implemented_Cores
         );
         void Do_Concurrent_Algorithm_For_PraiseEventId(
-            __int16 ptr_praiseEventId,
+            __int8 ptr_praiseEventId,
             class Object* ptr_Algorithm_Subset,
             class Object* ptr_Input_Subset,
             class Object* ptr_Output_Subset
@@ -35,7 +35,9 @@ namespace Server_Library
         class Object* Get_Algorithm_Subset();
         class Concurrent_Control* Get_Concurrent_Control();
 
-        void Set_Algorithm_Subset(class Object* value_algorithm);
+        void Set_Algorithm_Subset(class Praise0_Algorithm* praise0_algorithm);
+        void Set_Algorithm_Subset(class Praise1_Algorithm* praise1_algorithm);
+        void Set_Algorithm_Subset(class Praise2_Algorithm* praise2_algorithm);
 
     protected:
 

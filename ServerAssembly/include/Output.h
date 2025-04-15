@@ -15,8 +15,11 @@ namespace Server_Library
         class Object* Get_OutputBuffer_Subset();
         __int8 GetPraiseEventId();
 
-        void Set_OutputBuffer_Subset(class Object* value);
         void SetPraiseEventId(__int8 value);
+        void Set_OutputBuffer_Subset(class Praise0_Output* praise0_value);
+        void Set_OutputBuffer_Subset(class Praise1_Output* praise0_value);
+        void Set_OutputBuffer_Subset(class Praise2_Output* praise0_value);
+        
 
     protected:
 

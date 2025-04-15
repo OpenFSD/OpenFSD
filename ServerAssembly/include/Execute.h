@@ -1,11 +1,10 @@
 #pragma once
 #include <array>
 #include <thread>
+#include "ConcurrentQue_Server_Framework.h"
 #include "Execute_Control.h"
 #include "Framework_Server.h"
-#include "ConcurrentQue_Server_Framework.h"
 #include "Global.h"
-#include "ConcurrentQue_Server_LaunchConcurrency.h"
 #include "WriteEnable_Stack_Server_InputAction_Framework.h"
 #include "WriteEnable_Stack_Server_OutputRecieve_Framework.h"
 

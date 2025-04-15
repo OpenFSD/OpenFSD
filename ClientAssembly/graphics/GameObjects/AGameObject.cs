@@ -33,19 +33,10 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
             GameObjectNumber = GameObjectCounter++;
         }
 
-        public void SetScale(Vector3 scale)
-        {
-            _scale = scale;
-        }
-        public void SetPosition(Vector4 position)
-        {
-            _position = position;
-        }
         public virtual void Update(double time, double delta)
         {
             _position += _direction*(_velocity*(float) delta);
         }
-
 
         public virtual void Render(ICamera camera)
         {
@@ -58,6 +49,54 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
             _modelView = r1*r2*r3*s*t2*camera.LookAtMatrix;
             GL.UniformMatrix4(21, false, ref _modelView);
             _model.Render();
+        }
+//GET
+        public Vector4 Get_direction()
+        {
+            return _direction;
+        }
+        public Vector4 Get_position()
+        {
+            return _position;
+        }
+        public float Get_pitch()
+        {
+            return _rotation.X;
+        }
+
+        public float Get_yaw()
+        {
+            return _rotation.Y;
+        }
+
+        public float Get_roll()
+        {
+            return _rotation.Z;
+        }
+        
+//SET
+        public void SetScale(Vector3 scale)
+        {
+            _scale = scale;
+        }
+        public void SetPosition(Vector4 position)
+        {
+            _position = position;
+
+        }
+        public void Set_pitch(float value)
+        {
+            _rotation.X = value;
+        }
+
+        public void Set_yaw(float value)
+        {
+            _rotation.Y = value;
+        }
+
+        public void Set_roll(float value)
+        {
+            _rotation.Z = value;
         }
     }
 }

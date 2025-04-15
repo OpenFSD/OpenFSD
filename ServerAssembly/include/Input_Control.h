@@ -3,6 +3,7 @@
 #include "User_I.h"
 #include "Praise0_Input.h"
 #include "Praise1_Input.h"
+#include "Praise2_Input.h"
 
 namespace Server_Library
 {
@@ -12,8 +13,7 @@ namespace Server_Library
         Input_Control();
         virtual ~Input_Control();
         
-        void LoadValuesInToInputSubset(__int8 concurrent_CoreId, int* praiseEventId);
-        void SelectSetInputSubset(int* ptr_praiseEventId);
+        void SelectSet_Input_Subset(__int8 ptr_praiseEventId);
 
     protected:
 

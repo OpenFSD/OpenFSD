@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 namespace Server_Library
 {
@@ -7,14 +8,22 @@ namespace Server_Library
 	public:
 		Praise2_Output();
 		virtual ~Praise2_Output();
+		static std::vector<float> Get_position();
+		static std::vector<float> Get_front();
+		static std::vector<float> Get_up();
+		static std::vector<float> Get_right();
 
+		static void Set_position(std::vector<float> value);
+		static void Set_front(std::vector<float> value);
+		static void Set_up(std::vector<float> value);
+		static void Set_right(std::vector<float> value);
 
 	protected:
 
 	private:
-		static double _position[3];
-		static double _front[3];
-		static double _up[3];
-		static double _right[3];
+		static std::vector<float> _position;
+		static std::vector<float> _front;
+		static std::vector<float> _up;
+		static std::vector<float> _right;
 	};
 }

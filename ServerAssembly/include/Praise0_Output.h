@@ -1,5 +1,5 @@
 #pragma once
-
+#include <vector>
 namespace Server_Library
 {
 	class Praise0_Output
@@ -8,12 +8,12 @@ namespace Server_Library
 		Praise0_Output();
 		virtual ~Praise0_Output();
 
-		__int8 Get_numberOfClientsConnected();
-		void Set_numberOfClientsConnected(__int8 value);
+		bool Get_ping_Active();
+		void Set_ping_Active(bool value);
 
 	protected:
 
 	private:
-		static __int8 numberOfClientsConnected;
+		static bool ping_Active;
 	};
 }

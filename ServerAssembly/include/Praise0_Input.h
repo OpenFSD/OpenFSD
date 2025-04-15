@@ -8,12 +8,12 @@ namespace Server_Library
 		Praise0_Input();
 		virtual ~Praise0_Input();
 
-		int Get_Connection();
-		void Set_Connection(int value);
+		bool Get_ping_Active();
+		void Set_ping_Active(bool value);
 
 	protected:
 
 	private:
-		static int connection;
+		static bool ping_Active;
 	};
 }
