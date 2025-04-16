@@ -26,7 +26,7 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         {
             _model = model;
             _position = position;
-            _direction = direction;
+            _direction = new Vector4(0f, 0f, 0f, 0f);
             _rotation = rotation;
             _velocity = velocity;
             _scale = new Vector3(1);

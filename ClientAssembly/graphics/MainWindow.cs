@@ -30,8 +30,8 @@ namespace Florence.ServerAssembly.Graphics
 
 
         public MainWindow()
-            : base(750, // initial width
-                500, // initial height
+            : base(1920, // initial width
+                1080, // initial height
                 GraphicsMode.Default,
                 "",  // initial title
                 GameWindowFlags.Fullscreen,
@@ -134,6 +134,7 @@ namespace Florence.ServerAssembly.Graphics
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             _time += e.Time;
+
             HandleKeyboard(e.Time);
             HandleMouse();
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_Camera().Update(_time, e.Time);
@@ -223,21 +224,46 @@ namespace Florence.ServerAssembly.Graphics
                     else
                     {
                         float sensitivity = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity();
-                        // Calculate the offset of the mouse position
-                        var deltaX = new_mouseState.X * sensitivity;
-                        var deltaY = new_mouseState.Y * sensitivity;
+                        float deltaX = 0;
+                        float deltaY = 0;
+                    // Calculate the offset of the mouse position
+                        if (new_mouseState.X == (1920 / 2))
+                        {
+                            deltaX = 0;
+                        }
+                        else if (new_mouseState.X < (1920/2))
+                        {
+                            deltaX = new_mouseState.X - (1920 / 2);
+                        }
+                        else if (new_mouseState.X > (1920 / 2))
+                        {
+                            deltaX = new_mouseState.X - (1920 / 2);
+                        }
+                        if (new_mouseState.Y == (1080 / 2))
+                        {
+                            deltaY = 0;
+                        }
+                        else if (new_mouseState.Y < (1080 / 2))
+                        {
+                            deltaY = new_mouseState.Y - (1080 / 2);
+                        }
+                        else if (new_mouseState.Y > (1080 / 2))
+                        {
+                            deltaY = new_mouseState.Y - (1080 / 2);
+                        }
+                        deltaX = deltaX * sensitivity;
+                        deltaY = deltaY * sensitivity;
                         Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(new_mouseState.X, new_mouseState.Y));
                         // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
                         Vector4 rotation = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_rotation();
-                        rotation.X = (float)(Math.Sin((float)deltaX) * Math.Cos((float)deltaY));
-                        rotation.Y = (float)Math.Sin((float)deltaY);
-                        rotation.Z = (float)(Math.Cos((float)deltaX) * Math.Cos((float)deltaY));
+                        rotation.X = (float)(Math.Sin((float)-deltaX) * Math.Cos((float)-deltaY));
+                        rotation.Y = (float)Math.Sin((float)-deltaY);
+                        rotation.Z = (float)(Math.Cos((float)-deltaX) * Math.Cos((float)-deltaY));
 
                         // Vector4 position = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_position();
                         Vector4 direction = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_direction();
                         Matrix4 modelMatrix = Matrix4.CreateRotationX(rotation.X) * Matrix4.CreateRotationY(rotation.Y) * Matrix4.CreateRotationZ(rotation.Z) * Matrix4.CreateTranslation(direction.X, direction.Y, direction.Z);
                         Quaternion q = modelMatrix.ExtractRotation();
-                        q.Normalize();
                         direction = new Vector4(q.Xyz, 0);
                         direction.Normalize();
                         Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_direction(direction);
