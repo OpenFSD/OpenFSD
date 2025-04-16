@@ -26,7 +26,7 @@ namespace Florence.ClientAssembly.game_Instance
             mousePos = new Vector2(0, 0);
             _camera = null;
             cameraSpeed = 1.5f;
-            sensitivity = 0.2f;
+            sensitivity = 0.01f;
         }
 
         public FirstPersonCamera Get_Camera()
@@ -74,7 +74,7 @@ namespace Florence.ClientAssembly.game_Instance
 
         public void Set_MousePos(Vector2 pos)
         {
-            Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(pos);
+            mousePos = pos;
         }
     }
 }

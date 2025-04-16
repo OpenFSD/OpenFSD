@@ -59,6 +59,10 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         {
             return _position;
         }
+        public Vector4 Get_rotation()
+        {
+            return _rotation;
+        }
         public float Get_pitch()
         {
             return _rotation.X;
@@ -75,15 +79,23 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         }
         
 //SET
-        public void SetScale(Vector3 scale)
+        public void Set_direction(Vector4 value)
+        {
+            _direction = value;
+        }
+        public void Set_Scale(Vector3 scale)
         {
             _scale = scale;
         }
-        public void SetPosition(Vector4 position)
+        public void Set_Position(Vector4 position)
         {
             _position = position;
-
         }
+        public void Set_Rotation(Vector4 position)
+        {
+            _rotation = position;
+        }
+
         public void Set_pitch(float value)
         {
             _rotation.X = value;

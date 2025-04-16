@@ -18,23 +18,16 @@ namespace Florence.ServerAssembly.Graphics
     {
         private bool done_once;
         private readonly string _title;
-        //private GameObjectFactory _gameObjectFactory;
-        //private readonly List<AGameObject> _gameObjects = new List<AGameObject>();
         private double _time;
         private readonly Color4 _backColor = new Color4(0.1f, 0.1f, 0.3f, 1.0f);
         private Matrix4 _projectionMatrix;
         private float _fov = 45f;
-        //private ShaderProgram _texturedProgram;
-        //private ShaderProgram _solidProgram;
+
         private KeyboardState _lastKeyboardState;
         private MouseState mouseState;
-        //private Spacecraft _player;
-        private int _score;
-        private bool _gameOver;
-        private Bullet.BulletType _bulletType;
-        private Bullet _lastBullet;
+        
         private bool _useFirstPerson = true;
-        //private ICamera _camera;
+
 
         public MainWindow()
             : base(750, // initial width
@@ -102,7 +95,8 @@ namespace Florence.ServerAssembly.Graphics
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_Camera();
 
             CursorVisible = false;
-
+            
+            
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             GL.PatchParameter(PatchParameterInt.PatchVertices, 3);
             GL.PointSize(3);
@@ -111,7 +105,7 @@ namespace Florence.ServerAssembly.Graphics
             Closed += OnClosed;
             Debug.WriteLine("OnLoad .. done");
         }
-        
+
         private void OnClosed(object sender, EventArgs eventArgs)
         {
             Exit();
@@ -136,17 +130,18 @@ namespace Florence.ServerAssembly.Graphics
                 0.1f,                       // near plane
                 4000f);                     // far plane
         }
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             _time += e.Time;
-            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_Camera().Update(_time, e.Time);
             HandleKeyboard(e.Time);
-            HandleMouse(e.Time);
+            HandleMouse();
+            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_Camera().Update(_time, e.Time);
         }
 
         private void HandleKeyboard(double dt)
         {
-            var KeyboardState = Keyboard.GetState();
+            KeyboardState KeyboardState = Keyboard.GetState();
             
             if (done_once == true)
             {
@@ -156,7 +151,6 @@ namespace Florence.ServerAssembly.Graphics
                 done_once = false;
             }
             
-            float period = (float)dt;
             Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().SetBuffer_Input(Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetEmptyInput());
 
             if (KeyboardState.IsKeyDown(Key.Escape))
@@ -192,10 +186,10 @@ namespace Florence.ServerAssembly.Graphics
                     Vector4 foward = new Vector4(player.Get_direction().X, player.Get_direction().Y, player.Get_direction().Z, 0);
                     Vector4 up = Vector4.UnitY;
                     Vector4 right = new Vector4(Vector3.Cross(foward.Xyz, up.Xyz), 0);
-                    if (KeyboardState.IsKeyDown(Key.W)) player.SetPosition(position += (foward * player.Get_cameraSpeed() * (float)period));
-                    if (KeyboardState.IsKeyDown(Key.S)) player.SetPosition(position -= (foward * player.Get_cameraSpeed() * (float)period));
-                    if (KeyboardState.IsKeyDown(Key.A)) player.SetPosition(position -= (right * player.Get_cameraSpeed() * (float)period));
-                    if (KeyboardState.IsKeyDown(Key.D)) player.SetPosition(position += (right * player.Get_cameraSpeed() * (float)period));
+                    if (KeyboardState.IsKeyDown(Key.W)) player.Set_Position(position += (foward * player.Get_cameraSpeed() * (float)dt));
+                    if (KeyboardState.IsKeyDown(Key.S)) player.Set_Position(position -= (foward * player.Get_cameraSpeed() * (float)dt));
+                    if (KeyboardState.IsKeyDown(Key.A)) player.Set_Position(position -= (right * player.Get_cameraSpeed() * (float)dt));
+                    if (KeyboardState.IsKeyDown(Key.D)) player.Set_Position(position += (right * player.Get_cameraSpeed() * (float)dt));
                     /*
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                     Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
@@ -214,51 +208,57 @@ namespace Florence.ServerAssembly.Graphics
             _lastKeyboardState = KeyboardState;
         }
 
-        private void HandleMouse(double dt)
+        private void HandleMouse()
         {
-            var mouseState = new MouseState();
+            System.Console.WriteLine("TESTBENCH => HandleMouse");
+            MouseState new_mouseState = Mouse.GetCursorState();
+            System.Console.WriteLine("TESTBENCH => mouse X = " + new_mouseState.X + "  mouse Y = " + new_mouseState.Y);
             if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(1) == false)
             {
-                if ((mouseState.X != 0) || (mouseState.Y != 0))//mouse move
-                {
                     if (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_IsFirstMouseMove()) // This bool variable is initially set to true.
                     {
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(new_mouseState.X, new_mouseState.Y));
                         Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_IsFirstMouseMove(false);
                     }
                     else
                     {
+                        float sensitivity = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity();
                         // Calculate the offset of the mouse position
-                        var deltaX = mouseState.X - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().X;
-                        var deltaY = mouseState.Y - Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_MousePos().Y;
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(mouseState.X, mouseState.Y));
-
+                        var deltaX = new_mouseState.X * sensitivity;
+                        var deltaY = new_mouseState.Y * sensitivity;
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_MousePos(new Vector2(new_mouseState.X, new_mouseState.Y));
                         // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().
-                            Set_yaw(
-                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_yaw() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_pitch(
-                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_pitch() + (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_sensitivity()));
+                        Vector4 rotation = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_rotation();
+                        rotation.X = (float)(Math.Sin((float)deltaX) * Math.Cos((float)deltaY));
+                        rotation.Y = (float)Math.Sin((float)deltaY);
+                        rotation.Z = (float)(Math.Cos((float)deltaX) * Math.Cos((float)deltaY));
 
-                        
+                        // Vector4 position = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_position();
+                        Vector4 direction = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_direction();
+                        Matrix4 modelMatrix = Matrix4.CreateRotationX(rotation.X) * Matrix4.CreateRotationY(rotation.Y) * Matrix4.CreateRotationZ(rotation.Z) * Matrix4.CreateTranslation(direction.X, direction.Y, direction.Z);
+                        Quaternion q = modelMatrix.ExtractRotation();
+                        q.Normalize();
+                        direction = new Vector4(q.Xyz, 0);
+                        direction.Normalize();
+                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_direction(direction);
                     }
-                    /*
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(1);
-                    Florence.ClientAssembly.Praise_Files.Praise1_Input input_subset_Praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
-                    input_subset_Praise1.Set_Mouse_X(mouseState.X);
-                    input_subset_Praise1.Set_Mouse_Y(mouseState.Y);
-                    Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
-                    //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(1);//todo
-                    */
-                }
+                /*
+                Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(1, true);
+                Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Back_InputDouble().GetInputControl().SelectSetIntputSubset(1);
+                Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().SetPraiseEventId(1);
+                Florence.ClientAssembly.Praise_Files.Praise1_Input input_subset_Praise1 = (Florence.ClientAssembly.Praise_Files.Praise1_Input)Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().Get_InputBufferSubset();
+                input_subset_Praise1.Set_Mouse_X(new_mouseState.X);
+                input_subset_Praise1.Set_Mouse_Y(new_mouseState.Y);
+                Florence.ClientAssembly.Framework.GetClient().GetData().Flip_InBufferToWrite();
+                //Florence.ClientAssembly.Networking.CreateAndSendNewMessage(1);//todo
+                */
+                mouseState = new_mouseState;
+                System.Console.WriteLine("TESTBENCH => HandleMouse .. Done");
             }
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            Title = $"{_title}: FPS:{1f / e.Time:0000.0}, obj:{Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_GameObjects().Count}, score:{_score}";
             GL.ClearColor(Color.Black);// _backColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 

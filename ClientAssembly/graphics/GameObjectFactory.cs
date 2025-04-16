@@ -19,13 +19,13 @@ namespace Florence.ServerAssembly.Graphics
         public Spacecraft CreateSpacecraft()
         {
             var spacecraft = new Spacecraft(_models["Spacecraft"], new Vector4(0, -1f, Z, 0), Vector4.Zero, Vector4.Zero, 0);
-            spacecraft.SetScale(new Vector3(0.2f, 0.2f, 0.001f));
+            spacecraft.Set_Scale(new Vector3(0.2f, 0.2f, 0.001f));
             return spacecraft;
         }
         public Asteroid CreateAsteroid(string model, Vector4 position)
         {
             var obj = new Asteroid(_models[model], position, Vector4.Zero, Vector4.Zero, 0.2f);
-            obj.SetScale(new Vector3(0.2f));
+            obj.Set_Scale(new Vector3(0.2f));
             switch (model)
             {
                 case "Asteroid":
@@ -57,7 +57,7 @@ namespace Florence.ServerAssembly.Graphics
         public Asteroid CreateGoldenAsteroid()
         {
             var obj =  CreateAsteroid("Golden", GetRandomPosition());
-            obj.SetScale(new Vector3(0.22f));
+            obj.Set_Scale(new Vector3(0.22f));
             return obj;
         }
         public Asteroid CreateWoodenAsteroid()
@@ -67,20 +67,20 @@ namespace Florence.ServerAssembly.Graphics
         public Bullet CreateBullet(Vector4 position, Bullet.BulletType bulletType)
         {
             var bullet = new Bullet(_models["Bullet"], position + new Vector4(0, 0.1f, 0, 0), Vector4.UnitY, Vector4.Zero, 0.8f, bulletType);
-            bullet.SetScale(new Vector3(0.05f));
+            bullet.Set_Scale(new Vector3(0.05f));
             return bullet;
         }
         public AGameObject CreateGameOver(string s = "Gameover")
         {
             var obj = new GameOverCube(_models[s], new Vector4(0, 0, Z, 0), Vector4.Zero, Vector4.Zero, 0.0f);
-            obj.SetScale(new Vector3(0.8f));
+            obj.Set_Scale(new Vector3(0.8f));
             return obj;
         }
 
         public AGameObject CreateTestObject(string s)
         {
             var obj = new TestObject(_models[s], new Vector4(0, 0, Z, 0), -Vector4.UnitZ, Vector4.Zero, 0.3f);
-            obj.SetScale(new Vector3(0.8f));
+            obj.Set_Scale(new Vector3(0.8f));
             return obj;
         }
 
