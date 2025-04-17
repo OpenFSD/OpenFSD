@@ -120,10 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="graphics\Textures\asteroid texture one side mipmap levels 0 to 8.pdn" />
-    <None Include="graphics\Textures\gameover.pdn" />
-    <None Include="graphics\Textures\sixsided.pdn" />
-    <None Include="graphics\Textures\spacecraft.pdn" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="README.md" />
@@ -150,12 +146,10 @@
     <Content Include="graphics\Textures\asteroid.bmp" />
     <Content Include="graphics\Textures\dotted.png" />
     <Content Include="graphics\Textures\dotted2.png" />
-    <Content Include="graphics\Textures\gameover.png" />
     <Content Include="graphics\Textures\golden.bmp" />
+    <Content Include="graphics\Textures\grass.jpeg" />
     <Content Include="graphics\Textures\moonmap1k.jpg" />
-    <Content Include="graphics\Textures\pinkframe.bmp" />
     <Content Include="graphics\Textures\sixsided.png" />
-    <Content Include="graphics\Textures\spacecraft.png" />
     <Content Include="graphics\Textures\wooden texture mipmap levels 0 to 8.jpg" />
     <Content Include="graphics\Textures\wooden.png" />
     <Content Include="include\concurrency\ConcurrentQue_Client_Framework.h" />

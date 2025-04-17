@@ -15,6 +15,7 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         public readonly int GameObjectNumber;
         protected ARenderable _model;
         protected Vector4 _position;
+        protected Vector4 _last_position;
         protected Vector4 _direction;
         protected Vector4 _rotation;
         protected float _velocity;
@@ -26,7 +27,8 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         {
             _model = model;
             _position = position;
-            _direction = new Vector4(0f, 0f, 0f, 0f);
+            _last_position = position;
+            _direction = direction;
             _rotation = rotation;
             _velocity = velocity;
             _scale = new Vector3(1);
@@ -59,6 +61,10 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         {
             return _position;
         }
+        public Vector4 Get_last_position()
+        {
+            return _last_position;
+        }
         public Vector4 Get_rotation()
         {
             return _rotation;
@@ -90,6 +96,10 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         public void Set_Position(Vector4 position)
         {
             _position = position;
+        }
+        public void Set_last_Position(Vector4 position)
+        {
+            _last_position = position;
         }
         public void Set_Rotation(Vector4 position)
         {

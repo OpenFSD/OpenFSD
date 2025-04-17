@@ -21,9 +21,10 @@ namespace Florence.ServerAssembly.Graphics.Cameras
         public void Update(double time, double delta)
         {
             LookAtMatrix = Matrix4.LookAt(
-                new Vector3(_target.Position) + (_offset * new Vector3(_target.Direction)),  
-                new Vector3(_target.Position), 
-                Vector3.UnitY);
+                new Vector3(_target.Position) + _offset,
+                new Vector3(_target.Position + _target.Direction) + _offset,
+                new Vector3(_target.Position + _target.Position.Normalized())
+            );
         }
     }
 }
