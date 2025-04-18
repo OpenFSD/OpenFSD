@@ -11,56 +11,62 @@ namespace Florence.ClientAssembly.game_Instance
         private bool _firstMouseMove;
         private bool isPlayerMoved;
         private bool isMouseChanged;
-        private Vector2 mousePos;
-        private ThirdPersonCamera _camera;
-        private float cameraSpeed;
-        private float sensitivity;
 
-        public Player(ARenderable model, Vector4 position, Vector4 direction, Vector4 rotation, float velocity)
-            : base(model, position, direction, rotation, velocity)
+        private Vector2 mousePos;
+
+        private FirstPersonCamera _cameraFP;
+        private ThirdPersonCamera _cameraTP;
+        private bool cameraSelector;
+
+        public Player(ARenderable model, Vector3 position, Vector3 fowards, Vector3 rotation, float velocity)
+            : base(model, position, fowards, rotation, velocity)
         {
             _firstMove = true;
             _firstMouseMove = true;
-            isPlayerMoved = false;
-            isMouseChanged = false;
-            mousePos = new Vector2(1920/2, 1080/2);
-            _camera = null;
-            cameraSpeed = 1.5f;
-            sensitivity = 0.01f;
+            cameraSelector = true;
+             mousePos = new Vector2(1920/2, 1080/2);
+            _last_position = position;
+
+            _cameraFP = null;
+            _cameraTP = null;
         }
 
         public void Align_PlayerGyro()
         {
-            Set_Position(Get_position().Normalized() * 110f);
+            Set_Position(Get_position().Normalized() * 101f);
 
-            Vector3 v_cross = Vector3.Cross(_last_position.Xyz, _position.Xyz);
-            double theta = System.Math.Asin(v_cross.Length / (_last_position.Xyz.Length * _position.Xyz.Length));
-/*
-            v_A = new Vector3(0, _last_position.Y, 0);
-            v_B = new Vector3(0, _position.Y, 0);
-            Vector3 vY_cross = Vector3.Cross(v_A, v_B);
-            double thetaY = System.Math.Asin(vY_cross.Length / (v_A.Length * v_B.Length));
+            Set_fowards(Get_position() + (Get_position() - Get_last_position()));
+            Set_fowards(Get_fowards().Normalized());
 
-            v_A = new Vector3(0, 0, _last_position.Z);
-            v_B = new Vector3(0, 0, _position.Z);
-            Vector3 vZ_cross = Vector3.Cross(v_A, v_B);
-            double thetaZ = System.Math.Asin(vZ_cross.Length / (v_A.Length * v_B.Length));
+            Set_up(Get_position() + Get_position().Normalized());
 
-            Set_Rotation(new Vector4((float)thetaX, (float)thetaY, (float)thetaZ, 0));
-
-            Matrix4 modelMatrix = Matrix4.CreateRotationX(_rotation.X) * Matrix4.CreateRotationY(_rotation.Y) * Matrix4.CreateRotationZ(_rotation.Z) * Matrix4.CreateTranslation(_direction.X, _direction.Y, _direction.Z);
-            Quaternion q = modelMatrix.ExtractRotation();
-            _direction = new Vector4(q.Xyz, 0);
-            _direction.Normalize();
-            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Set_direction(_direction);
-*/
+            Set_right(Vector3.Cross(Get_fowards(),Get_up()));
+            Set_right(Get_right().Normalized());
         }
-
-        public ThirdPersonCamera Get_Camera()
+        public void Create_Cameras()
         {
-            return _camera;
+            Vector3 temp = -_fowards + _up;
+            _cameraTP = new Florence.ServerAssembly.Graphics.Cameras.ThirdPersonCamera(
+                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player(),
+                temp
+            ); ;
+            while (_cameraTP == null) { }
+
+            _cameraFP = new Florence.ServerAssembly.Graphics.Cameras.FirstPersonCamera(
+                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player()
+            );
+            while (_cameraFP == null) { }
         }
 
+//GET
+        public FirstPersonCamera Get_Camera_FP()
+        {
+            return _cameraFP;
+        }
+        public ThirdPersonCamera Get_Camera_TP()
+        {
+            return _cameraTP;
+        }
         public bool Get_IsFirstMove()
         {
             return _firstMove;
@@ -69,27 +75,17 @@ namespace Florence.ClientAssembly.game_Instance
         {
             return _firstMouseMove;
         }
+        public bool Get_cameraSelector()
+        {
+            return cameraSelector;
+        }
         public Vector2 Get_MousePos()
         {
             return mousePos;
         }
 
-        public float Get_cameraSpeed()
-        {
-            return cameraSpeed;
-        }
-
-        public float Get_sensitivity()
-        {
-            return sensitivity;
-        }
-
-        public void Set_Camera()
-        {
-            _camera = new Florence.ServerAssembly.Graphics.Cameras.ThirdPersonCamera(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player());
-            while (_camera == null) { }
-        }
-
+        
+//SET
         public void Set_IsFirstMove(bool value)
         {
             _firstMove = value;
@@ -98,11 +94,15 @@ namespace Florence.ClientAssembly.game_Instance
         {
             _firstMouseMove = value;
         }
-
+        public void Set_cameraSelector(bool value)
+        {
+            cameraSelector = value;
+        }
         public void Set_MousePos(Vector2 pos)
         {
             mousePos = pos;
         }
+
     }
 }
 

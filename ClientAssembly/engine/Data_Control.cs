@@ -17,8 +17,8 @@ namespace Florence.ClientAssembly
         {
             flag_IsLoaded_Stack_InputAction = false;
             flag_IsLoaded_Stack_OutputAction = false;
-            isPraiseActive = new bool[3];//Number Of Praises
-            for (int index = 0; index < 3; index++)//Number Of Praises
+            isPraiseActive = new bool[6];//Number Of Praises
+            for (int index = 0; index < 6; index++)//Number Of Praises
             {
                 isPraiseActive[index] = false;
             }

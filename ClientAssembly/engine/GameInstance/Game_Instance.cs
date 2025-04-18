@@ -9,11 +9,8 @@ namespace Florence.ClientAssembly
     {
         static private Florence.ClientAssembly.game_Instance.Arena arena;
         static private Florence.ClientAssembly.game_Instance.Map_Default mapDefault;
-
         static private Florence.ServerAssembly.Graphics.GameObjectFactory _gameObjectFactory;
         static private List<Florence.ServerAssembly.Graphics.GameObjects.AGameObject> _gameObjects;
-
-        static private Florence.ServerAssembly.Graphics.GameObjects.Spacecraft spaceCraft;
         static private Dictionary<string, ARenderable> models;
         static private Florence.ServerAssembly.Graphics.ShaderProgram _solidProgram;
         static private Florence.ServerAssembly.Graphics.ShaderProgram _texturedProgram;
@@ -26,7 +23,7 @@ namespace Florence.ClientAssembly
             mapDefault = new Florence.ClientAssembly.game_Instance.Map_Default();
             while (mapDefault == null) { /* Wait while is created */ }
 
-            _gameObjects = new List<Florence.ServerAssembly.Graphics.GameObjects.AGameObject>(7);
+            _gameObjects = new List<Florence.ServerAssembly.Graphics.GameObjects.AGameObject>(1);
             while (_gameObjects == null) { /* Wait while is created */ }
 
         }
@@ -46,13 +43,13 @@ namespace Florence.ClientAssembly
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Create_Player();
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player());
             _gameObjects.RemoveAt(0);
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateEarth("Earth", new Vector4(0, 0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector4(-150, 0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector4(150, 0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector4(0, -150, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector4(0, 150, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector4(0, 0, -150, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector4(0, 0, 150, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateEarth("Earth", new Vector3(0, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(-150, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(150, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, -150, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, 150, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, -150)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, 150)));
         }
 
         public void Load_Sphere_Solid()

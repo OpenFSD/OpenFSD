@@ -97,10 +97,7 @@
     <Compile Include="graphics\GameObjectFactory.cs" />
     <Compile Include="graphics\GameObjects\AGameObject.cs" />
     <Compile Include="graphics\GameObjects\Asteroid.cs" />
-    <Compile Include="graphics\GameObjects\Bullet.cs" />
     <Compile Include="graphics\GameObjects\GameOverCube.cs" />
-    <Compile Include="graphics\GameObjects\Spacecraft.cs" />
-    <Compile Include="graphics\GameObjects\TestObject.cs" />
     <Compile Include="graphics\IcoSphereFactory.cs" />
     <Compile Include="graphics\MainWindow.cs" />
     <Compile Include="graphics\Renderables\ARenderable.cs" />
