@@ -109,9 +109,8 @@ namespace Florence.ServerAssembly.Graphics
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             _time += e.Time;
-
-            HandleKeyboard(e.Time);
             HandleMouse();
+            HandleKeyboard(e.Time);
             switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
             {
                 case true://First Person
@@ -179,8 +178,11 @@ namespace Florence.ServerAssembly.Graphics
                         switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
                         {
                             case true://First Person
-                                player.Set_fowards(player.Get_position() + (player.Get_position() - player.Get_last_position()));
-                                player.Set_fowards(player.Get_fowards().Normalized());
+                                Matrix4 modelMatrix = Matrix4.CreateRotationX(player.Get_rotation_In_World().X) * Matrix4.CreateRotationY(player.Get_rotation_In_World().Y) * Matrix4.CreateRotationZ(player.Get_rotation_In_World().Z) * Matrix4.CreateTranslation(player.Get_fowards().X, player.Get_fowards().Y, player.Get_fowards().Z);
+                                Quaternion q = modelMatrix.ExtractRotation();
+                                Vector3 fowards = new Vector3(q.Xyz);
+                                fowards.Normalize();
+                                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_fowards(fowards);
 
                                 player.Set_up(player.Get_position() + player.Get_position().Normalized());
 
@@ -231,8 +233,11 @@ namespace Florence.ServerAssembly.Graphics
                         switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
                         {
                             case true://First Person
-                                player.Set_fowards(player.Get_position() + (player.Get_position() - player.Get_last_position()));
-                                player.Set_fowards(player.Get_fowards().Normalized());
+                                Matrix4 modelMatrix = Matrix4.CreateRotationX(player.Get_rotation_In_World().X) * Matrix4.CreateRotationY(player.Get_rotation_In_World().Y) * Matrix4.CreateRotationZ(player.Get_rotation_In_World().Z) * Matrix4.CreateTranslation(player.Get_fowards().X, player.Get_fowards().Y, player.Get_fowards().Z);
+                                Quaternion q = modelMatrix.ExtractRotation();
+                                Vector3 fowards = new Vector3(q.Xyz);
+                                fowards.Normalize();
+                                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_fowards(fowards);
 
                                 player.Set_up(player.Get_position() + player.Get_position().Normalized());
 
@@ -283,8 +288,11 @@ namespace Florence.ServerAssembly.Graphics
                         switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
                         {
                             case true://First Person
-                                player.Set_fowards(player.Get_position() + (player.Get_position() - player.Get_last_position()));
-                                player.Set_fowards(player.Get_fowards().Normalized());
+                                Matrix4 modelMatrix = Matrix4.CreateRotationX(player.Get_rotation_In_World().X) * Matrix4.CreateRotationY(player.Get_rotation_In_World().Y) * Matrix4.CreateRotationZ(player.Get_rotation_In_World().Z) * Matrix4.CreateTranslation(player.Get_fowards().X, player.Get_fowards().Y, player.Get_fowards().Z);
+                                Quaternion q = modelMatrix.ExtractRotation();
+                                Vector3 fowards = new Vector3(q.Xyz);
+                                fowards.Normalize();
+                                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_fowards(fowards);
 
                                 player.Set_up(player.Get_position() + player.Get_position().Normalized());
 
@@ -334,8 +342,11 @@ namespace Florence.ServerAssembly.Graphics
                         switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
                         {
                         case true://First Person
-                            player.Set_fowards(player.Get_position() + (player.Get_position() - player.Get_last_position()));
-                            player.Set_fowards(player.Get_fowards().Normalized());
+                            Matrix4 modelMatrix = Matrix4.CreateRotationX(player.Get_rotation_In_World().X) * Matrix4.CreateRotationY(player.Get_rotation_In_World().Y) * Matrix4.CreateRotationZ(player.Get_rotation_In_World().Z) * Matrix4.CreateTranslation(player.Get_fowards().X, player.Get_fowards().Y, player.Get_fowards().Z);
+                            Quaternion q = modelMatrix.ExtractRotation();
+                            Vector3 fowards = new Vector3(q.Xyz);
+                            fowards.Normalize();
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_fowards(fowards);
 
                             player.Set_up(player.Get_position() + player.Get_position().Normalized());
 
@@ -390,47 +401,87 @@ namespace Florence.ServerAssembly.Graphics
                     }
                     else
                     {
+                        Florence.ClientAssembly.game_Instance.Player player = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player();
                         float sensitivity = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Get_sensitivity();
                         float deltaX = 0;
                         float deltaY = 0;
+
                         // Calculate the offset of the mouse position
-                        if (new_mouseState.X == (1920 / 2))
-                        {
-                            deltaX = 0;
-                        }
-                        else
-                        {
-                            deltaX = new_mouseState.X - (1920 / 2);
-                        }
-
-                        if (new_mouseState.Y == (1080 / 2))
-                        {
-                            deltaY = 0;
-                        }
-                        else
-                        {
-                            deltaY = new_mouseState.Y - (1080 / 2);
-                        }
-
+                        if (new_mouseState.X == (1920 / 2)) deltaX = 0;
+                        else deltaX = new_mouseState.X - (1920 / 2);
                         deltaX = deltaX * sensitivity;
+                        player.Add_deltaX((short)deltaX);
+
+                        if (new_mouseState.Y == (1080 / 2)) deltaY = 0;
+                        else deltaY = new_mouseState.Y - (1080 / 2);
                         deltaY = deltaY * sensitivity;
-                        System.Console.WriteLine("TESTBENCH => deltaX = " + deltaX + "  deltaY = " + deltaY);
+                        player.Add_deltaY((short)deltaY);
 
+                        if (deltaX != 0 || deltaY != 0)
+                        {
+                            System.Console.WriteLine("TESTBENCH => RAW_X = " + deltaX + "  RAW_Y = " + deltaY);
+                                
                             // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
-                            Vector3 rotation = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_rotation();
-                        rotation.X = (float)(Math.Sin((float)deltaX) * Math.Cos((float)deltaY));
-                        rotation.Y = (float)Math.Sin((float)deltaY);
-                        rotation.Z = (float)(Math.Cos((float)deltaX) * Math.Cos((float)deltaY));
+                            Vector3 gyroPosition;
+                            gyroPosition.X = (float)(Math.Sin(player.Get_deltaX()) * Math.Cos(player.Get_deltaY()));
+                            gyroPosition.Y = (float)Math.Sin(player.Get_deltaY());
+                            gyroPosition.Z = (float)(Math.Cos(player.Get_deltaX()) * Math.Cos(player.Get_deltaY()));
 
-                        // Vector4 position = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_Player().Get_position();
-                        Vector3 fowards = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_fowards();
-                        Matrix4 modelMatrix = Matrix4.CreateRotationX(rotation.X) * Matrix4.CreateRotationY(rotation.Y) * Matrix4.CreateRotationZ(rotation.Z) * Matrix4.CreateTranslation(fowards.X, fowards.Y, fowards.Z);
-                        Quaternion q = modelMatrix.ExtractRotation();
-                        fowards = new Vector3(q.Xyz);
-                        fowards.Normalize();
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_fowards(fowards);
-                        
-                        Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_MousePos(new Vector2(new_mouseState.X, new_mouseState.Y));
+                            Vector3 axis_X_wolrd = player.Fowards;
+                            Vector3 axis_Y_world = player.Right;
+                            Vector3 axis_Z_world = player.Up;
+
+                            Vector3 cross = Vector3.Cross(axis_X_wolrd, gyroPosition);
+                            float theta_X = (float)System.Math.Asin(cross.Length / (axis_X_wolrd.Length * gyroPosition.Length));
+
+                            cross = Vector3.Cross(axis_Y_world, gyroPosition);
+                            float theta_Y = (float)System.Math.Asin(cross.Length / (axis_Y_world.Length * gyroPosition.Length));
+                                
+                            cross = Vector3.Cross(axis_Z_world, gyroPosition);
+                            float theta_Z = (float)System.Math.Asin(cross.Length / (axis_Z_world.Length * gyroPosition.Length));
+
+                            player.Set_Rotation(new Vector3(
+                                player.Get_rotation_In_World().X + theta_X,
+                                player.Get_rotation_In_World().Y + theta_Y,
+                                player.Get_rotation_In_World().Z + theta_Z
+                            ));
+                            player.Set_Rotation(player.Get_rotation_In_World().Normalized());
+
+                            if (player.Get_rotation_In_World().X < System.Math.PI)
+                            {
+                                player.Set_world_pitch((float)((2 * System.Math.PI) + player.Get_rotation_In_World().X));
+                            }
+                            else if (player.Get_rotation_In_World().X > System.Math.PI)
+                            {
+                                player.Set_world_pitch((float)((2 * System.Math.PI) + player.Get_rotation_In_World().X));
+                            }
+
+                            if (player.Get_rotation_In_World().Y < System.Math.PI)
+                            {
+                                player.Set_world_yaw((float)((2 * System.Math.PI) + player.Get_rotation_In_World().Y));
+                            }
+                            else if (player.Get_rotation_In_World().Y > System.Math.PI)
+                            {
+                                player.Set_world_yaw((float)((2 * System.Math.PI) + player.Get_rotation_In_World().Y));
+                            }
+
+                            if (player.Get_rotation_In_World().Z < System.Math.PI)
+                            {
+                                player.Set_world_roll((float)((2 * System.Math.PI) + player.Get_rotation_In_World().Z));
+                            }
+                            else if (player.Get_rotation_In_World().Z > System.Math.PI)
+                            {
+                                player.Set_world_roll((float)((2 * System.Math.PI) + player.Get_rotation_In_World().Z));
+                            }
+
+                            Matrix4 modelMatrix = Matrix4.CreateRotationX(player.Get_rotation_In_World().X) * Matrix4.CreateRotationY(player.Get_rotation_In_World().Y) * Matrix4.CreateRotationZ(player.Get_rotation_In_World().Z) * Matrix4.CreateTranslation(player.Fowards.X, player.Fowards.Y, player.Fowards.Z);
+                            Quaternion q = modelMatrix.ExtractRotation();
+
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_fowards(q.Xyz);
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_right(Vector3.Cross(q.Xyz, player.Get_up()));
+
+                            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Set_MousePos(new Vector2(new_mouseState.X, new_mouseState.Y));
+                        }
                     }
                     break;
 

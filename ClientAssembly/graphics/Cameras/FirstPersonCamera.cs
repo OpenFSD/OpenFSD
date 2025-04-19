@@ -20,8 +20,8 @@ namespace Florence.ServerAssembly.Graphics.Cameras
         {
             _target = target;
             _offset = offset;
-            cameraSpeed = 20f;
-            sensitivity = 0.01f;
+            cameraSpeed = 3600f;
+            sensitivity = 1f;
         }
 
         public void Update(double time, double delta)
@@ -29,7 +29,7 @@ namespace Florence.ServerAssembly.Graphics.Cameras
             LookAtMatrix = Matrix4.LookAt(
                 _target.Position + _offset,  
                 _target.Position + _target.Fowards + _offset,
-                _target.Position + _target.Position.Normalized()
+                _target.Up
             );
         }
 

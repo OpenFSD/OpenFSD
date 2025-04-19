@@ -18,8 +18,8 @@ namespace Florence.ClientAssembly.game_Instance
         private ThirdPersonCamera _cameraTP;
         private bool cameraSelector;
 
-        public Player(ARenderable model, Vector3 position, Vector3 fowards, Vector3 rotation, float velocity)
-            : base(model, position, fowards, rotation, velocity)
+        public Player(ARenderable model, Vector3 position, Vector3 direction, Vector3 rotation, float velocity)
+            : base(model, position, direction, rotation, velocity)
         {
             _firstMove = true;
             _firstMouseMove = true;
