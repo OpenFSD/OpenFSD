@@ -44,40 +44,40 @@ namespace Florence.ClientAssembly
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player());
             _gameObjects.RemoveAt(0);
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateEarth("Earth", new Vector3(0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(-150, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(150, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, -150, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, 150, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, -150)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, 150)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(-50, 0, 50)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(50, 0, 50)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, -50, 50)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, 50, 50)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, -60)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, 60)));
         }
 
         public void Load_Sphere_Solid()
         {
             _solidProgram = new Florence.ServerAssembly.Graphics.ShaderProgram();
-            _solidProgram.AddShader(ShaderType.VertexShader, "..\\..\\graphics\\Shaders\\1Vert\\simplePipeVert.c");
-            _solidProgram.AddShader(ShaderType.FragmentShader, "..\\..\\graphics\\Shaders\\5Frag\\simplePipeFrag.c");
+            _solidProgram.AddShader(ShaderType.VertexShader, "..\\..\\..\\graphics\\Shaders\\1Vert\\simplePipeVert.c");
+            _solidProgram.AddShader(ShaderType.FragmentShader, "..\\..\\..\\graphics\\Shaders\\5Frag\\simplePipeFrag.c");
             _solidProgram.Link();
         }
 
         public void Load_Sphere_Textures()
         {
             _texturedProgram = new Florence.ServerAssembly.Graphics.ShaderProgram();
-            _texturedProgram.AddShader(ShaderType.VertexShader, "..\\..\\graphics\\Shaders\\1Vert\\simplePipeTexVert.c");
-            _texturedProgram.AddShader(ShaderType.FragmentShader, "..\\..\\graphics\\Shaders\\5Frag\\simplePipeTexFrag.c");
+            _texturedProgram.AddShader(ShaderType.VertexShader, "..\\..\\..\\graphics\\Shaders\\1Vert\\simplePipeTexVert.c");
+            _texturedProgram.AddShader(ShaderType.FragmentShader, "..\\..\\..\\graphics\\Shaders\\5Frag\\simplePipeTexFrag.c");
             _texturedProgram.Link();
         }
         public void Load_Models()
         {
             models = new Dictionary<string, ARenderable>();
             while (models == null) { /* Wait while is created */ }
-            models.Add("Earth", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\grass.jpeg", 8));
-            models.Add("Wooden", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\wooden.png", 8));
-            models.Add("Golden", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\golden.bmp", 8));
-            models.Add("Asteroid", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\moonmap1k.jpg", 8));
-            //models.Add("Spacecraft", new MipMapGeneratedRenderObject(Florence.ServerAssembly.Graphics.RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\graphics\\Textures\\spacecraft.png", 8));
-            //models.Add("Gameover", new MipMapGeneratedRenderObject(Florence.ServerAssembly.Graphics.RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\graphics\\Textures\\gameover.png", 8));
-            models.Add("Player", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\graphics\\Textures\\dotted.png", 8));
+            models.Add("Earth", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\grass.jpeg", 8));
+            models.Add("Wooden", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\wooden.png", 8));
+            models.Add("Golden", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\golden.bmp", 8));
+            models.Add("Asteroid", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\moonmap1k.jpg", 8));
+            //models.Add("Spacecraft", new MipMapGeneratedRenderObject(Florence.ServerAssembly.Graphics.RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\spacecraft.png", 8));
+            //models.Add("Gameover", new MipMapGeneratedRenderObject(Florence.ServerAssembly.Graphics.RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\gameover.png", 8));
+            models.Add("Player", new MipMapGeneratedRenderObject(new Florence.ServerAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\dotted.png", 8));
         }
 
         public Florence.ClientAssembly.game_Instance.Arena Get_Arena()

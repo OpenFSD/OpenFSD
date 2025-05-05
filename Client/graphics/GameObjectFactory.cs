@@ -18,7 +18,7 @@ namespace Florence.ServerAssembly.Graphics
         public Asteroid CreateEarth(string model, Vector3 position)
         {
             var obj = new Asteroid(_models[model], position, Vector3.Zero, Vector3.Zero, 0f);
-            obj.Set_Scale(new Vector3(100f));
+            obj.Set_Scale(new Vector3(10f));
             return obj;
         }
 
@@ -26,19 +26,19 @@ namespace Florence.ServerAssembly.Graphics
         {
             player = new Florence.ClientAssembly.game_Instance.Player(
                 _models["Player"],
-                new Vector3(0f, 0f, 103f),
+                new Vector3(0f, 0f, 11f),
                 Vector3.Zero,
-                new Vector3((float)(-System.Math.PI / 2), 0f, 0f), 
+                new Vector3(0f, 0f, 0f), 
                 0
             );
             while (player == null) { /* Wait while is created */ }
-            player.Set_Scale(new Vector3(10f));
+            player.Set_Scale(new Vector3(1f));
         }
 
         public Asteroid CreateAsteroid(string model, Vector3 position)
         {
             var obj = new Asteroid(_models[model], position, Vector3.Zero, Vector3.Zero, 0f);
-            obj.Set_Scale(new Vector3(1f));
+            obj.Set_Scale(new Vector3(10f));
             return obj;
         }
 

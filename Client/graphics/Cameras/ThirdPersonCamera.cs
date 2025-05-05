@@ -19,7 +19,7 @@ namespace Florence.ServerAssembly.Graphics.Cameras
             _player = target;
             _offset = offset;
             cameraSpeed = 20f;
-            sensitivity = 0.01f;
+            sensitivity = 1f;
         }
 
         public void Update(double time, double delta)

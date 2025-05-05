@@ -18,9 +18,9 @@ namespace Florence.ClientAssembly
             client.GetExecute().Initialise();
             client.GetExecute().Initialise_Threads(Framework.GetClient().GetGlobal().Get_NumCores());
 
-            Florence.Concurrency.ConcurrentQue_Client.Create_ConcurrentQue();
+            //Florence.Concurrency.ConcurrentQue_Client.Create_ConcurrentQue();
             
-            Florence.WriteEnable.Stack_Client_OutputRecieve.Create_WriteEnable();
+           // Florence.WriteEnable.Stack_Client_OutputRecieve.Create_WriteEnable();
 /*
             Valve.Sockets.Library.Initialize();
             Valve.Sockets.Library.Initialize(new StringBuilder(1024));

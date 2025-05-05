@@ -10,7 +10,6 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         public ARenderable Model => _model;
         public Vector3 Direction => _direction;
         public Vector3 Position => _position;
-        public Vector3 Last_Position => _last_position;
         public Vector3 Fowards => _fowards;
         public Vector3 Up => _up;
         public Vector3 Right => _right;
@@ -35,12 +34,11 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
             _model = model;
             _direction = direction;
             _position = position;
-            _last_position = position;
             _fowards = new Vector3(1f, 0f, 0f);
-            _up = position + position.Normalized();
+            _up = Vector3.UnitY;
             _right = Vector3.Cross(_up, _fowards);
             _scale = new Vector3(1);
-            _rotation_In_World = new Vector3((float)-(System.Math.PI/2), 0f, 0f);
+            _rotation_In_World = new Vector3(0f, 0f, 0f);
             _speed = velocity;
             
             GameObjectNumber = GameObjectCounter++;
