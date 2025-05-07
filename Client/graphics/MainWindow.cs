@@ -8,12 +8,12 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
-using Florence.ServerAssembly.Graphics.Cameras;
-using Florence.ServerAssembly.Graphics.GameObjects;
-using Florence.ServerAssembly.Graphics.Renderables;
+using Florence.ClientAssembly.Graphics.Cameras;
+using Florence.ClientAssembly.Graphics.GameObjects;
+using Florence.ClientAssembly.Graphics.Renderables;
 using Florence.ClientAssembly.game_Instance;
 
-namespace Florence.ServerAssembly.Graphics
+namespace Florence.ClientAssembly.Graphics
 {
     public sealed class MainWindow : GameWindow
     {
@@ -50,7 +50,8 @@ namespace Florence.ServerAssembly.Graphics
         protected override void OnLoad(EventArgs e)
         {
             Debug.WriteLine("OnLoad");
-            VSync = VSyncMode.Off;
+            VSync = VSyncMode.On;
+
             CreateProjection();
 
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Load_Sphere_Solid();
@@ -176,8 +177,9 @@ namespace Florence.ServerAssembly.Graphics
                     {
                         if (KeyboardState.IsKeyDown(Key.W))
                         {
+                            System.Console.WriteLine("Key => W");//TestBench
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
-                            temp_W = (player.Get_position() + player.Fowards);
+                            temp_W = (player.Get_position() + player.Get_Camera_FP().Fowards);
                             /*
                                 Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                                 Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
@@ -197,8 +199,9 @@ namespace Florence.ServerAssembly.Graphics
                     {
                         if (KeyboardState.IsKeyDown(Key.S))
                         {
+                            System.Console.WriteLine("Key => S");//TestBench
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(3, true);
-                            temp_S = (player.Get_position() - player.Fowards);
+                            temp_S = (player.Get_position() - player.Get_Camera_FP().Fowards);
                             /*
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
@@ -218,8 +221,9 @@ namespace Florence.ServerAssembly.Graphics
                     {
                         if (KeyboardState.IsKeyDown(Key.A))
                         {
+                            System.Console.WriteLine("Key => A");//TestBench
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(4, true);
-                            temp_A = (player.Get_position() - player.Right);
+                            temp_A = (player.Get_position() - player.Get_Camera_FP().Right);
                             /*
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(2, true);
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
@@ -239,8 +243,9 @@ namespace Florence.ServerAssembly.Graphics
                     {
                         if (KeyboardState.IsKeyDown(Key.D))
                         {
+                            System.Console.WriteLine("Key => D");//TestBench
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().SetIsPraiseEvent(5, true);
-                            temp_D = (player.Get_position() + player.Right);
+                            temp_D = (player.Get_position() + player.Get_Camera_FP().Right);
                             /*
                             
                             Florence.ClientAssembly.Framework.GetClient().GetData().GetInput_Instnace().GetBuffer_Front_InputDouble().GetInputControl().SelectSetIntputSubset(2);
@@ -262,7 +267,7 @@ namespace Florence.ServerAssembly.Graphics
                         || Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(5) == true
                     )
                     {
-                        player.Set_Position(player.Get_position() + (Vector3.Normalize(temp_W + temp_S + temp_A + temp_D) * (float)(player.Get_speed() * dt)));
+                        player.Set_Position(player.Get_position() + ((Vector3.Normalize(temp_W + temp_S + temp_A + temp_D) * (float)(player.Get_speed() * dt))));
                     }
                     break;
 
@@ -298,7 +303,7 @@ namespace Florence.ServerAssembly.Graphics
                     var player = Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player();
                     if (mouseState.X != (char)(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_X() / 2) || mouseState.Y != (char)(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_Y() / 2)) // check to see if the window is focused  
                     {
-                        System.Console.WriteLine("TESTBENCH => rot_X = " + player.Get_rotation_In_World().X + "  rot_Y = " + player.Get_rotation_In_World().Y + "  rot_Z = " + player.Get_rotation_In_World().Z);
+                        System.Console.WriteLine("TESTBENCH => rot_X = " + player.Get_rotation().X + "  rot_Y = " + player.Get_rotation().Y + "  rot_Z = " + player.Get_rotation().Z);
                         float anglePerPixle = Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_fov() / Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_Y();
                         float deltaX = -(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_X() / 2) + mouseState.X;
                         float deltaY = -(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_Y() / 2) + mouseState.Y;
@@ -330,10 +335,10 @@ namespace Florence.ServerAssembly.Graphics
                         front.Y = (float)Math.Sin(player.Get_player_Pitch_radians());
                         front.Z = (float)(Math.Sin(player.Get_player_Yaw_radians()) * Math.Cos(player.Get_player_Pitch_radians()));
                         front = Vector3.Normalize(front);
-                        player.Set_fowards(front);
+                        player.Get_Camera_FP().Set_fowards(front);
                         OpenTK.Input.Mouse.SetPosition((char)(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_X() / 2), (char)(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_Y() / 2));
-                        player.Set_up(Vector3.UnitY);
-                        player.Set_right(Vector3.Cross(player.Get_fowards(), player.Get_up()));
+                        player.Get_Camera_FP().Set_up(Vector3.UnitY);
+                        player.Get_Camera_FP().Set_right(Vector3.Cross(player.Get_Camera_FP().Get_fowards(), player.Get_Camera_FP().Get_up()));
                     }
                     break;
 

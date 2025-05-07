@@ -1,7 +1,7 @@
 ﻿using OpenTK;
-using Florence.ServerAssembly.Graphics.Cameras;
-using Florence.ServerAssembly.Graphics.GameObjects;
-using Florence.ServerAssembly.Graphics.Renderables;
+using Florence.ClientAssembly.Graphics.Cameras;
+using Florence.ClientAssembly.Graphics.GameObjects;
+using Florence.ClientAssembly.Graphics.Renderables;
 
 namespace Florence.ClientAssembly.game_Instance
 {
@@ -32,21 +32,18 @@ namespace Florence.ClientAssembly.game_Instance
 
         public void Initialise_Player()
         {
-            _last_position = Position;
             //player_axis_X = this.Fowards;
             //player_axis_Y = this.Up;
             //player_axis_Z = this.Right;
         }
         public void Create_Cameras()
         {
-            Vector3 temp = -_fowards + _up;
-            _cameraTP = new Florence.ServerAssembly.Graphics.Cameras.ThirdPersonCamera(
-                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player(),
-                temp
+            _cameraTP = new Florence.ClientAssembly.Graphics.Cameras.ThirdPersonCamera(
+                Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player()
             );
             while (_cameraTP == null) { }
 
-            _cameraFP = new Florence.ServerAssembly.Graphics.Cameras.FirstPersonCamera(
+            _cameraFP = new Florence.ClientAssembly.Graphics.Cameras.FirstPersonCamera(
                 Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player()
             );
             while (_cameraFP == null) { }

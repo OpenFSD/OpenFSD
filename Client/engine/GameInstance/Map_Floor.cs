@@ -1,19 +1,23 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using Florence.ClientAssembly.Graphics.GameObjects;
+using Florence.ClientAssembly.Graphics.Renderables;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Florence.ClientAssembly.game_Instance
 {
-    public class Map_Default
+    public class Map_Floor
     {
         public static int amountOfDots = 6;
         public static double[] hexagon_Tile = { 0 };
         public static double[] hexagon_corner_Colour = { 0 };
 
-        public Map_Default() 
+        public Map_Floor()
         {
             hexagon_Tile = new double[21];
 

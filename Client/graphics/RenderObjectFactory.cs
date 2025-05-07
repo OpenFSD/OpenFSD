@@ -1,8 +1,8 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
-using Florence.ServerAssembly.Graphics.Renderables;
+using Florence.ClientAssembly.Graphics.Renderables;
 
-namespace Florence.ServerAssembly.Graphics
+namespace Florence.ClientAssembly.Graphics
 {
     public class RenderObjectFactory
     {

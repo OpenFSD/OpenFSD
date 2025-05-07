@@ -1,8 +1,8 @@
 ﻿using System;
 using OpenTK;
-using Florence.ServerAssembly.Graphics.Renderables;
+using Florence.ClientAssembly.Graphics.Renderables;
 
-namespace Florence.ServerAssembly.Graphics.GameObjects
+namespace Florence.ClientAssembly.Graphics.GameObjects
 {
     public class GameOverCube : AGameObject
     {
@@ -14,9 +14,9 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         public override void Update(double time, double delta)
         {
             var k = (float)time * 0.4f;
-            _rotation_In_World.X = k * 0.7f;
-            _rotation_In_World.Y = k * 0.5f;
-            _rotation_In_World.Z = (float)Math.Sin(k * 0.4f);
+            _rotation.X = k * 0.7f;
+            _rotation.Y = k * 0.5f;
+            _rotation.Z = (float)Math.Sin(k * 0.4f);
             base.Update(time, delta);
         }
         

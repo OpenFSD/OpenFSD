@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Florence.ServerAssembly.Graphics.Renderables
+namespace Florence.ClientAssembly.Graphics.Renderables
 {
     public class MipMapManualRenderObject : ARenderable
     {

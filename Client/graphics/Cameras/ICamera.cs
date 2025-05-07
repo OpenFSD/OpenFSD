@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace Florence.ServerAssembly.Graphics.Cameras
+namespace Florence.ClientAssembly.Graphics.Cameras
 {
     public interface ICamera
     {

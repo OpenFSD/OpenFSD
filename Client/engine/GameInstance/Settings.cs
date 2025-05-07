@@ -18,9 +18,9 @@ namespace Florence.ClientAssembly.game_Instance
         public Settings()
         {
             System.Console.WriteLine("Florence.ClientAssembly: Settings");
-            set_ScreenSize_X((char)800);
-            set_ScreenSize_Y((char)600);
-            Set_fov(45f);
+            set_ScreenSize_X((char)1920);
+            set_ScreenSize_Y((char)1080);
+            Set_fov(90f);
         }
 //GET
         public float Get_fov()

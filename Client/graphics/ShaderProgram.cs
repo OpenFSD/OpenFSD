@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Florence.ServerAssembly.Graphics
+namespace Florence.ClientAssembly.Graphics
 {
     public class ShaderProgram : IDisposable
     {
