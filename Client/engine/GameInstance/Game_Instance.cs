@@ -44,15 +44,10 @@ namespace Florence.ClientAssembly
             _gameObjects.RemoveAt(0);
 
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Create_MapFloor();
-            for (int index_X = 0; index_X < 10; index_X++)
-            {
-                for (int index_Y = 0; index_Y < 10; index_Y++)
-                {
-                    _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Floor()[index_X][index_Y]);
-                }
-            }
 
-            //_gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateEarth("Earth", new Vector3(0, 0, 0)));
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Tiles_Floor());
+
+            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateEarth("Earth", new Vector3(0, 0, 0)));
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(-50, 0, 50)));
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(50, 0, 50)));
             _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, -50, 50)));
@@ -80,7 +75,7 @@ namespace Florence.ClientAssembly
         {
             models = new Dictionary<string, ARenderable>();
             while (models == null) { /* Wait while is created */ }
-            models.Add("Earth", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(7), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\grass.jpeg", 8));
+            models.Add("Earth", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\grass.jpeg", 8));
             models.Add("Wooden", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\wooden.png", 8));
             models.Add("Golden", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\golden.bmp", 8));
             models.Add("Asteroid", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\moonmap1k.jpg", 8));

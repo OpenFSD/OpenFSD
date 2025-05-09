@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Florence.ClientAssembly.game_Instance
 {
-    public class Map_Floor
+    public class Hexgon
     {
         public static int amountOfDots = 6;
         public static double[] hexagon_Tile = { 0 };
         public static double[] hexagon_corner_Colour = { 0 };
 
-        public Map_Floor()
+        public Hexgon()
         {
             hexagon_Tile = new double[21];
 

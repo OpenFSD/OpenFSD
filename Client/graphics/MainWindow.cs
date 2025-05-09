@@ -311,34 +311,10 @@ namespace Florence.ClientAssembly.Graphics
 
                         //player.Set_Last_MousePos(new Vector2(mouseState.X, mouseState.Y));
 
-                        player.Set_player_Yaw_radians(player.Get_player_Yaw_radians() + (float)((System.Math.PI / 180) * (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Get_sensitivity())));
-                        if (player.Get_player_Yaw_radians() > System.Math.PI)
-                        {
-                            player.Set_player_Yaw_radians(player.Get_player_Yaw_radians() - (float)(2 * System.Math.PI));
-                        }
-                        else if (player.Get_player_Yaw_radians() <= -System.Math.PI)
-                        {
-                            player.Set_player_Yaw_radians(player.Get_player_Yaw_radians() + (float)(2 * System.Math.PI));
-                        }
+                        player.Get_Camera_FP().Set_Yaw(player.Get_Camera_FP().Get_Yaw() + (float)((System.Math.PI / 180) * (deltaX * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Get_sensitivity())));
+                        player.Get_Camera_FP().Set_Pitch(player.Get_Camera_FP().Get_Pitch() + (float)((System.Math.PI / 180) * (deltaY * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Get_sensitivity())));
 
-                        player.Set_player_Pitch_radians(player.Get_player_Pitch_radians() + (float)((System.Math.PI / 180) * (deltaY * Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Get_sensitivity())));
-                        if (player.Get_player_Pitch_radians() >= (float)((System.Math.PI / 180) * 85f))
-                        {
-                            player.Set_player_Pitch_radians((float)((System.Math.PI / 180) * 85f));
-                        }
-                        else if (player.Get_player_Pitch_radians() <= (float)((System.Math.PI / 180) * -85f))
-                        {
-                            player.Set_player_Pitch_radians((float)((System.Math.PI / 180) * -85f));
-                        }
-                        Vector3 front;
-                        front.X = (float)(Math.Cos(player.Get_player_Yaw_radians()) * Math.Cos(player.Get_player_Pitch_radians()));
-                        front.Y = (float)Math.Sin(player.Get_player_Pitch_radians());
-                        front.Z = (float)(Math.Sin(player.Get_player_Yaw_radians()) * Math.Cos(player.Get_player_Pitch_radians()));
-                        front = Vector3.Normalize(front);
-                        player.Get_Camera_FP().Set_fowards(front);
                         OpenTK.Input.Mouse.SetPosition((char)(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_X() / 2), (char)(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_ScreenSize_Y() / 2));
-                        player.Get_Camera_FP().Set_up(Vector3.UnitY);
-                        player.Get_Camera_FP().Set_right(Vector3.Cross(player.Get_Camera_FP().Get_fowards(), player.Get_Camera_FP().Get_up()));
                     }
                     break;
 

@@ -8,19 +8,14 @@ namespace Florence.ClientAssembly.Graphics
 {
     public class GameObjectFactory : IDisposable
     {
-        private static Florence.ClientAssembly.Graphics.GameObjects.MapFloor[][] floorTile;
+        private static Florence.ClientAssembly.Graphics.GameObjects.Map_Tile_Floor floorTile;
         private readonly Dictionary<string, ARenderable> _models;
         static private Florence.ClientAssembly.game_Instance.Player player;
 
         public GameObjectFactory(Dictionary<string, ARenderable> models)
         {
             _models = models;
-            MapFloor aFloorObject = new MapFloor(_models["Floor"], new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 0, 0), 0);
-            floorTile = new MapFloor[10][];
-            for (int i = 0; i < 10; i++)
-            {
-                floorTile[i] = [aFloorObject, aFloorObject, aFloorObject, aFloorObject, aFloorObject, aFloorObject, aFloorObject, aFloorObject, aFloorObject, aFloorObject];
-            }
+            floorTile = null;
         }
         public Asteroid CreateEarth(string model, Vector3 position)
         {
@@ -30,19 +25,13 @@ namespace Florence.ClientAssembly.Graphics
         }
         public void Create_MapFloor()
         {
-            for (int index_X = 0; index_X < 10; index_X++)
-            {
-                for (int index_Y = 0; index_Y < 10; index_Y++)
-                {
-                    floorTile[index_X][index_Y] = new Florence.ClientAssembly.Graphics.GameObjects.MapFloor(
-                        _models["Floor"], 
-                        new Vector3((float)(index_X + 0.5f), (float)(index_Y + 0.5f), 0), 
-                        new Vector3(0, 0, 0), 
-                        new Vector3(0, 0, 0), 
+            floorTile = new Map_Tile_Floor(
+                        _models["Floor"],
+                        new Vector3((float)(0.5f), 0, (float)(0.5f)),
+                        new Vector3(0, 0, 0),
+                        new Vector3(0, 0, 0),
                         0
                     );
-                }
-            }
         }
         public void Create_Player()
         {
@@ -70,7 +59,7 @@ namespace Florence.ClientAssembly.Graphics
                 obj.Value.Dispose();
         }
 //GET
-        public Florence.ClientAssembly.Graphics.GameObjects.MapFloor[][] Get_Floor()
+        public Florence.ClientAssembly.Graphics.GameObjects.Map_Tile_Floor Get_Tiles_Floor()
         {
             return floorTile;
         }
