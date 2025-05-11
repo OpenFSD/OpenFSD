@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ClientAssembly": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

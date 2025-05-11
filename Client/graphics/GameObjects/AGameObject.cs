@@ -2,6 +2,7 @@
 using OpenTK.Graphics.OpenGL4;
 using Florence.ClientAssembly.Graphics.Cameras;
 using Florence.ClientAssembly.Graphics.Renderables;
+using System;
 
 namespace Florence.ClientAssembly.Graphics.GameObjects
 {
@@ -95,7 +96,6 @@ namespace Florence.ClientAssembly.Graphics.GameObjects
 
         public void Set_Rotation(Vector3 value)
         {
-            value.Normalized();
             _rotation = value;
 
             if (_rotation.X > System.Math.PI)
@@ -113,7 +113,7 @@ namespace Florence.ClientAssembly.Graphics.GameObjects
                 }
             }
 
-            _rotation.Y = _rotation.Y + value.Y;
+            _rotation.Y = value.Y;
             if (_rotation.X > System.Math.PI)
             {
                 while (_rotation.Y > System.Math.PI)
@@ -129,7 +129,7 @@ namespace Florence.ClientAssembly.Graphics.GameObjects
                 }
             }
 
-            _rotation.Z = _rotation.Z + value.Z;
+            _rotation.Z = value.Z;
             if (_rotation.Z > System.Math.PI)
             {
                 while (_rotation.Z > System.Math.PI)

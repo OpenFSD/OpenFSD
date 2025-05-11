@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using OpenTK;
 using Florence.ClientAssembly.Graphics.GameObjects;
 using Florence.ClientAssembly.Graphics.Renderables;
+using ClientAssembly.graphics.GameObjects;
+using System.Reflection;
 
 namespace Florence.ClientAssembly.Graphics
 {
     public class GameObjectFactory : IDisposable
     {
-        private static Florence.ClientAssembly.Graphics.GameObjects.Map_Tile_Floor floorTile;
+        static private List<Florence.ClientAssembly.Graphics.GameObjects.AGameObject> _floorTiles;
         private readonly Dictionary<string, ARenderable> _models;
         static private Florence.ClientAssembly.game_Instance.Player player;
 
         public GameObjectFactory(Dictionary<string, ARenderable> models)
         {
             _models = models;
-            floorTile = null;
+            _floorTiles = null;
         }
         public Asteroid CreateEarth(string model, Vector3 position)
         {
@@ -23,15 +25,9 @@ namespace Florence.ClientAssembly.Graphics
             obj.Set_Scale(new Vector3(10f));
             return obj;
         }
-        public void Create_MapFloor()
+        public void Create_FloorForMap(string model, Vector3 position)
         {
-            floorTile = new Map_Tile_Floor(
-                        _models["Floor"],
-                        new Vector3((float)(0.5f), 0, (float)(0.5f)),
-                        new Vector3(0, 0, 0),
-                        new Vector3(0, 0, 0),
-                        0
-                    );
+            _floorTiles.Add(new Cube(_models[model], position, Vector3.Zero, Vector3.Zero, 0f));
         }
         public void Create_Player()
         {
@@ -59,9 +55,9 @@ namespace Florence.ClientAssembly.Graphics
                 obj.Value.Dispose();
         }
 //GET
-        public Florence.ClientAssembly.Graphics.GameObjects.Map_Tile_Floor Get_Tiles_Floor()
+        public Florence.ClientAssembly.Graphics.GameObjects.AGameObject Get_FloorForMap()
         {
-            return floorTile;
+            return _floorTiles.ElementAt(0);
         }
         public ARenderable Get_Model(string model)
         {

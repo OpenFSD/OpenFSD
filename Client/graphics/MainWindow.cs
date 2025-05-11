@@ -12,6 +12,7 @@ using Florence.ClientAssembly.Graphics.Cameras;
 using Florence.ClientAssembly.Graphics.GameObjects;
 using Florence.ClientAssembly.Graphics.Renderables;
 using Florence.ClientAssembly.game_Instance;
+using ClientAssembly.graphics.GameObjects;
 
 namespace Florence.ClientAssembly.Graphics
 {
@@ -20,7 +21,7 @@ namespace Florence.ClientAssembly.Graphics
         private bool done_once;
 
         private readonly string _title;
-        private double _time;
+        private float time;
         private readonly Color4 _backColor = new Color4(0.1f, 0.1f, 0.3f, 1.0f);
         private Matrix4 _projectionMatrix;
         
@@ -36,7 +37,8 @@ namespace Florence.ClientAssembly.Graphics
                 DisplayDevice.Default,
                 4, // OpenGL major version
                 5, // OpenGL minor version
-                GraphicsContextFlags.ForwardCompatible)
+                GraphicsContextFlags.ForwardCompatible
+            )
         {
             _title += "github.com/OpenFSD: OpenGL Version: " + GL.GetString(StringName.Version);
         }
@@ -51,7 +53,10 @@ namespace Florence.ClientAssembly.Graphics
         {
             Debug.WriteLine("OnLoad");
             VSync = VSyncMode.On;
+            //todo
+            //Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().initProgram();
 
+            //todo
             CreateProjection();
 
             Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Load_Sphere_Solid();
@@ -108,17 +113,20 @@ namespace Florence.ClientAssembly.Graphics
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            _time += e.Time;
+            base.OnUpdateFrame(e);
+            time += (float)e.Time;
+
             HandleKeyboard(e.Time);
             HandleMouse();
+
             switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
             {
                 case true://First Person
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Update(_time, e.Time);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_FP().Update(time, e.Time);
                     break;
 
                 case false://Third Person
-                    Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_TP().Update(_time, e.Time);
+                    Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_Camera_TP().Update(time, e.Time);
                     break;
             }
             
@@ -147,6 +155,8 @@ namespace Florence.ClientAssembly.Graphics
             switch (Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player().Get_cameraSelector())
             {
                 case true://First Person
+                    System.Console.WriteLine("Capture Keyboard Input");//TestBench
+
                     Vector3 temp_W = new Vector3(0);
                     Vector3 temp_S = new Vector3(0);
                     Vector3 temp_A = new Vector3(0);
@@ -160,6 +170,7 @@ namespace Florence.ClientAssembly.Graphics
                     }
                     if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(0) == false)
                     {
+                        System.Console.WriteLine("isPraiseEventId = 0");//TestBench
                         if (KeyboardState.IsKeyDown(Key.Enter))//ping
                         {
                             /*
@@ -175,6 +186,7 @@ namespace Florence.ClientAssembly.Graphics
                     }
                     if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(2) == false)
                     {
+                        System.Console.WriteLine("isPraiseEventId = 2");//TestBench
                         if (KeyboardState.IsKeyDown(Key.W))
                         {
                             System.Console.WriteLine("Key => W");//TestBench
@@ -197,6 +209,7 @@ namespace Florence.ClientAssembly.Graphics
                     }
                     if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(3) == false)
                     {
+                        System.Console.WriteLine("isPraiseEventId = 3");//TestBench
                         if (KeyboardState.IsKeyDown(Key.S))
                         {
                             System.Console.WriteLine("Key => S");//TestBench
@@ -219,6 +232,7 @@ namespace Florence.ClientAssembly.Graphics
                     }
                     if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(4) == false)
                     {
+                        System.Console.WriteLine("isPraiseEventId = 4");//TestBench
                         if (KeyboardState.IsKeyDown(Key.A))
                         {
                             System.Console.WriteLine("Key => A");//TestBench
@@ -241,6 +255,7 @@ namespace Florence.ClientAssembly.Graphics
                     }
                     if (Florence.ClientAssembly.Framework.GetClient().GetData().GetData_Control().GetFlag_IsPraiseEvent(5) == false)
                     {
+                        System.Console.WriteLine("isPraiseEventId = 5");//TestBench
                         if (KeyboardState.IsKeyDown(Key.D))
                         {
                             System.Console.WriteLine("Key => D");//TestBench
@@ -334,6 +349,7 @@ namespace Florence.ClientAssembly.Graphics
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            base.OnRenderFrame(e);
             GL.ClearColor(Color.Black);// _backColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
