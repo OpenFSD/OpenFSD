@@ -56,4 +56,12 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="graphics\Cameras\" />
+    <Folder Include="graphics\GameObjects\" />
+    <Folder Include="graphics\Renderables\" />
+    <Folder Include="graphics\Shaders\1Vert\" />
+    <Folder Include="graphics\Shaders\5Frag\" />
+  </ItemGroup>
+
 </Project>

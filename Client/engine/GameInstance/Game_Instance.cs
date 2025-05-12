@@ -1,241 +1,279 @@
-﻿using Florence.ClientAssembly.Graphics.Renderables;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Input;
+using Florence.ClientAssembly.Graphics.Cameras;
+using Florence.ClientAssembly.Graphics.GameObjects;
+using Florence.ClientAssembly.Graphics.Renderables;
+using Florence.ClientAssembly.Graphics;
 
 namespace Florence.ClientAssembly
 {
-    public class Game_Instance
+    public sealed class Game_Instance : GameWindow
     {
-        static private Florence.ClientAssembly.game_Instance.Arena arena;
-        static private Florence.ClientAssembly.Graphics.GameObjectFactory _gameObjectFactory;
-        static private List<Florence.ClientAssembly.Graphics.GameObjects.AGameObject> _gameObjects;
-        static private Dictionary<string, ARenderable> models;
-        static private Florence.ClientAssembly.Graphics.ShaderProgram _solidProgram;
-        static private Florence.ClientAssembly.Graphics.ShaderProgram _texturedProgram;
-
-        /// <summary>
-        /// ID of our program on the graphics card
-        /// </summary>
-        int pgmID;
-
-        /// <summary>
-        /// Address of the vertex shader
-        /// </summary>
-        int vsID;
-
-        /// <summary>
-        /// Address of the fragment shader
-        /// </summary>
-        int fsID;
-
-        /// <summary>
-        /// Address of the color parameter
-        /// </summary>
-        int attribute_vcol;
-
-        /// <summary>
-        /// Address of the position parameter
-        /// </summary>
-        int attribute_vpos;
-
-        /// <summary>
-        /// Address of the modelview matrix uniform
-        /// </summary>
-        int uniform_mview;
-
-        /// <summary>
-        /// Address of the Vertex Buffer Object for our position parameter
-        /// </summary>
-        int vbo_position;
-
-        /// <summary>
-        /// Address of the Vertex Buffer Object for our color parameter
-        /// </summary>
-        int vbo_color;
-
-        /// <summary>
-        /// Address of the Vertex Buffer Object for our modelview matrix
-        /// </summary>
-        int vbo_mview;
-
-        /// <summary>
-        /// Index Buffer Object
-        /// </summary>
-        int ibo_elements;
-
-        /// <summary>
-        /// Array of our vertex positions
-        /// </summary>
-        Vector3[] vertdata;
-
-        /// <summary>
-        /// Array of our vertex colors
-        /// </summary>
-        Vector3[] coldata;
-
-        /// <summary>
-        /// Array of our indices
-        /// </summary>
-        int[] indicedata;
-
-
-        /// <summary>
-        /// List of all the Volumes to be drawn
-        /// </summary>
-        //List<Volume> objects = new List<Volume>();
-
+        private readonly string _title;
+        private GameObjectFactory _gameObjectFactory;
+        private readonly List<AGameObject> _gameObjects = new List<AGameObject>();
+        private double _time;
+        private readonly Color4 _backColor = new Color4(0.1f, 0.1f, 0.3f, 1.0f);
+        private Matrix4 _projectionMatrix;
+        private float _fov = 45f;
+        private ShaderProgram _texturedProgram;
+        private ShaderProgram _solidProgram;
+        private KeyboardState _lastKeyboardState;
+        private Spacecraft _player;
+        private int _score;
+        private bool _gameOver;
+        private Bullet.BulletType _bulletType;
+        private Bullet _lastBullet;
+        private bool _useFirstPerson = true;
+        private ICamera _camera;
         public Game_Instance()
+            : base(750, // initial width
+                500, // initial height
+                GraphicsMode.Default,
+                "",  // initial title
+                GameWindowFlags.Fullscreen,
+                DisplayDevice.Default,
+                4, // OpenGL major version
+                5, // OpenGL minor version
+                GraphicsContextFlags.ForwardCompatible)
         {
-            arena = new Florence.ClientAssembly.game_Instance.Arena();
-            while (arena == null) { /* Wait while is created */ }
-
-
-
-            _gameObjects = new List<Florence.ClientAssembly.Graphics.GameObjects.AGameObject>(1);
-            while (_gameObjects == null) { /* Wait while is created */ }
-
+            _title += "dreamstatecoding.blogspot.com: OpenGL Version: " + GL.GetString(StringName.Version);
         }
-        public void Initalise_Graphics()
+        protected override void OnResize(EventArgs e)
         {
-            Florence.ClientAssembly.Framework.GetClient().GetExecute().Create_And_Run_Graphics();
-        }
-        public void initProgram()
-        {
-            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Create_FloorForMap();
-
-            /** In this function, we'll start with a call to the GL.CreateProgram() function,
-             * which returns the ID for a new program object, which we'll store in pgmID. */
-            pgmID = GL.CreateProgram();
-
-            loadShader("..\\..\\..\\..\\graphics\\Shaders\\1Vert\\cubeVert.glsl", ShaderType.VertexShader, pgmID, out vsID);
-            loadShader("..\\..\\..\\..\\graphics\\Shaders\\5Frag\\cubeFrag.glsl", ShaderType.FragmentShader, pgmID, out fsID);
-
-            /** Now that the shaders are added, the program needs to be linked.
-             * Like C code, the code is first compiled, then linked, so that it goes
-             * from human-readable code to the machine language needed. */
-            GL.LinkProgram(pgmID);
-            Console.WriteLine(GL.GetProgramInfoLog(pgmID));
-
-            /** We have multiple inputs on our vertex shader, so we need to get
-            * their addresses to give the shader position and color information for our vertices.
-            * 
-            * To get the addresses for each variable, we use the 
-            * GL.GetAttribLocation and GL.GetUniformLocation functions.
-            * Each takes the program's ID and the name of the variable in the shader. */
-            attribute_vpos = GL.GetAttribLocation(pgmID, "vPosition");
-            attribute_vcol = GL.GetAttribLocation(pgmID, "vColor");
-            uniform_mview = GL.GetUniformLocation(pgmID, "modelview");
-
-            /** Now our shaders and program are set up, but we need to give them something to draw.
-             * To do this, we'll be using a Vertex Buffer Object (VBO).
-             * When you use a VBO, first you need to have the graphics card create
-             * one, then bind to it and send your information. 
-             * Then, when the DrawArrays function is called, the information in
-             * the buffers will be sent to the shaders and drawn to the screen. */
-            GL.GenBuffers(1, out vbo_position);
-            GL.GenBuffers(1, out vbo_color);
-            GL.GenBuffers(1, out vbo_mview);
-
-            /** We'll need to get another buffer object to put our indice data into.  */
-            GL.GenBuffers(1, out ibo_elements);
-        }
-        private void loadShader(String filename, ShaderType type, int program, out int address)
-        {
-            address = GL.CreateShader(type);
-            using (StreamReader sr = new StreamReader(filename))
-            {
-                GL.ShaderSource(address, sr.ReadToEnd());
-            }
-            GL.CompileShader(address);
-            GL.AttachShader(program, address);
-            Console.WriteLine(GL.GetShaderInfoLog(address));
+            GL.Viewport(0, 0, Width, Height);
+            CreateProjection();
         }
 
-        public void Create_FloorForMap()
-        {
-            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Create_FloorForMap("FloorOfGrass", new Vector3(0, 0, 0));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_FloorForMap());
-        }
-        public void Create_gameObjectFactory()
-        {
-            _gameObjectFactory = new Florence.ClientAssembly.Graphics.GameObjectFactory(models);
-            while (_gameObjectFactory == null) { /* Wait while is created */ }
-        }
 
-        public void Create_gameObjects()
+        protected override void OnLoad(EventArgs e)
         {
-            Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Create_Player();
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().Get_Player());
-            _gameObjects.RemoveAt(0);
-
-            //_gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateEarth("Earth", new Vector3(0, 0, 0)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(-50, 0, 50)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Asteroid", new Vector3(50, 0, 50)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, -50, 50)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Golden", new Vector3(0, 50, 50)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, -60)));
-            _gameObjects.Add(Florence.ClientAssembly.Framework.GetClient().GetData().GetGame_Instance().Get_gameObjectFactory().CreateAsteroid("Wooden", new Vector3(0, 0, 60)));
-        }
-
-        public void Load_Sphere_Solid()
-        {
-            _solidProgram = new Florence.ClientAssembly.Graphics.ShaderProgram();
-            _solidProgram.AddShader(ShaderType.VertexShader, "..\\..\\..\\..\\graphics\\Shaders\\1Vert\\simplePipeVert.c");
-            _solidProgram.AddShader(ShaderType.FragmentShader, "..\\..\\..\\..\\graphics\\Shaders\\5Frag\\simplePipeFrag.c");
+            Debug.WriteLine("OnLoad");
+            VSync = VSyncMode.Off;
+            CreateProjection();
+            _solidProgram = new ShaderProgram();
+            _solidProgram.AddShader(ShaderType.VertexShader, "..\\..\\..\\Graphics\\Shaders\\1Vert\\simplePipeVert.c");
+            _solidProgram.AddShader(ShaderType.FragmentShader, "..\\..\\..\\Graphics\\Shaders\\5Frag\\simplePipeFrag.c");
             _solidProgram.Link();
-        }
 
-        public void Load_Sphere_Textures()
-        {
-            _texturedProgram = new Florence.ClientAssembly.Graphics.ShaderProgram();
-            _texturedProgram.AddShader(ShaderType.VertexShader, "..\\..\\..\\..\\graphics\\Shaders\\1Vert\\simplePipeTexVert.c");
-            _texturedProgram.AddShader(ShaderType.FragmentShader, "..\\..\\..\\..\\graphics\\Shaders\\5Frag\\simplePipeTexFrag.c");
+            _texturedProgram = new ShaderProgram();
+            _texturedProgram.AddShader(ShaderType.VertexShader, "..\\..\\..\\Graphics\\Shaders\\1Vert\\simplePipeTexVert.c");
+            _texturedProgram.AddShader(ShaderType.FragmentShader, "..\\..\\..\\Graphics\\Shaders\\5Frag\\simplePipeTexFrag.c");
             _texturedProgram.Link();
+
+            var models = new Dictionary<string, ARenderable>();
+            models.Add("Wooden", new MipMapGeneratedRenderObject(new IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\wooden.png", 8));
+            models.Add("Golden", new MipMapGeneratedRenderObject(new IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\golden.bmp", 8));
+            models.Add("Asteroid", new MipMapGeneratedRenderObject(new IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\moonmap1k.jpg", 8));
+            models.Add("Spacecraft", new MipMapGeneratedRenderObject(RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\spacecraft.png", 8));
+            models.Add("Gameover", new MipMapGeneratedRenderObject(RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\gameover.png", 8));
+            models.Add("Bullet", new MipMapGeneratedRenderObject(new IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\graphics\\Textures\\dotted.png", 8));
+
+            //models.Add("TestObject", new TexturedRenderObject(RenderObjectFactory.CreateTexturedCube(1, 1, 1), _texturedProgram.Id, @"Components\Textures\asteroid texture one side.jpg"));
+            //models.Add("TestObjectGen", new MipMapGeneratedRenderObject(RenderObjectFactory.CreateTexturedCube(1, 1, 1), _texturedProgram.Id, @"Components\Textures\asteroid texture one side.jpg", 8));
+            //models.Add("TestObjectPreGen", new MipMapManualRenderObject(RenderObjectFactory.CreateTexturedCube(1, 1, 1), _texturedProgram.Id, @"Components\Textures\asteroid texture one side mipmap levels 0 to 8.bmp", 9));
+
+            _gameObjectFactory = new GameObjectFactory(models);
+
+            _player = _gameObjectFactory.CreateSpacecraft();
+            _gameObjects.Add(_player);
+            _gameObjects.Add(_gameObjectFactory.CreateAsteroid());
+            _gameObjects.Add(_gameObjectFactory.CreateGoldenAsteroid());
+            _gameObjects.Add(_gameObjectFactory.CreateWoodenAsteroid());
+
+            _camera = new StaticCamera();
+
+            CursorVisible = true;
+
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            GL.PatchParameter(PatchParameterInt.PatchVertices, 3);
+            GL.PointSize(3);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
+            Closed += OnClosed;
+            Debug.WriteLine("OnLoad .. done");
         }
-        public void Load_Models()
+
+        private void OnClosed(object sender, EventArgs eventArgs)
         {
-            models = new Dictionary<string, ARenderable>();
-            while (models == null) { /* Wait while is created */ }
-            models.Add("Earth", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\grass.jpeg", 8));
-            models.Add("Wooden", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\wooden.png", 8));
-            models.Add("Golden", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\golden.bmp", 8));
-            models.Add("Asteroid", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\moonmap1k.jpg", 8));
-            models.Add("Floor", new MipMapGeneratedRenderObject(Florence.ClientAssembly.Graphics.RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\grass.jpeg", 8));
-            //models.Add("Gameover", new MipMapGeneratedRenderObject(Florence.ClientAssembly.Graphics.RenderObjectFactory.CreateTexturedCube6(1, 1, 1), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\gameover.png", 8));
-            models.Add("Player", new MipMapGeneratedRenderObject(new Florence.ClientAssembly.Graphics.IcoSphereFactory().Create(3), _texturedProgram.Id, "..\\..\\..\\..\\graphics\\Textures\\dotted.png", 8));
+            Exit();
         }
 
-        public Florence.ClientAssembly.game_Instance.Arena Get_Arena()
+        public override void Exit()
         {
-            return arena;
+            Debug.WriteLine("Exit called");
+            _gameObjectFactory.Dispose();
+            _solidProgram.Dispose();
+            _texturedProgram.Dispose();
+            base.Exit();
         }
 
-        public List<Florence.ClientAssembly.Graphics.GameObjects.AGameObject> Get_GameObjects()
+        private void CreateProjection()
         {
-            return _gameObjects;
+
+            var aspectRatio = (float)Width / Height;
+            _projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(
+                _fov * ((float)Math.PI / 180f), // field of view angle, in radians
+                aspectRatio,                // current window aspect ratio
+                0.1f,                       // near plane
+                4000f);                     // far plane
         }
-        public Florence.ClientAssembly.Graphics.GameObjectFactory Get_gameObjectFactory()
+        protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            return _gameObjectFactory;
+            _time += e.Time;
+            var remove = new HashSet<AGameObject>();
+            var view = new Vector4(0, 0, -2.4f, 0);
+            int removedAsteroids = 0;
+            int outOfBoundsAsteroids = 0;
+            foreach (var item in _gameObjects)
+            {
+                item.Update(_time, e.Time);
+                if (item.ToBeRemoved)
+                    remove.Add(item);
+
+                if (item.GetType() == typeof(Bullet))
+                {
+                    var collide = ((Bullet)item).CheckCollision(_gameObjects);
+                    if (collide != null)
+                    {
+                        remove.Add(item);
+                        if (remove.Add(collide))
+                        {
+                            _score += ((Asteroid)collide).Score;
+                            removedAsteroids++;
+                        }
+                    }
+                }
+                if (item.GetType() == typeof(Spacecraft))
+                {
+                    var collide = ((Spacecraft)item).CheckCollision(_gameObjects);
+                    if (collide != null)
+                    {
+                        foreach (var x in _gameObjects)
+                            remove.Add(x);
+                        _gameObjects.Add(_gameObjectFactory.CreateGameOver());
+                        _gameOver = true;
+                        removedAsteroids = 0;
+                        break;
+                    }
+                }
+            }
+            foreach (var r in remove)
+            {
+                r.ToBeRemoved = true;
+                _gameObjects.Remove(r);
+            }
+            for (int i = 0; i < removedAsteroids; i++)
+            {
+                _gameObjects.Add(_gameObjectFactory.CreateRandomAsteroid());
+            }
+            for (int i = 0; i < outOfBoundsAsteroids; i++)
+            {
+                _gameObjects.Add(_gameObjectFactory.CreateRandomAsteroid());
+            }
+            if (_lastBullet == null || _lastBullet.ToBeRemoved)
+            {
+                _camera = new StaticCamera();
+            }
+            _camera.Update(_time, e.Time);
+            HandleKeyboard(e.Time);
         }
 
-        public Dictionary<string, ARenderable> Get_models()
+        private void HandleKeyboard(double dt)
         {
-            return models;
+            var keyState = Keyboard.GetState();
+
+            if (keyState.IsKeyDown(Key.Escape))
+            {
+                Exit();
+            }
+            if (keyState.IsKeyDown(Key.M))
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Point);
+            }
+            if (keyState.IsKeyDown(Key.Comma))
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            }
+            if (keyState.IsKeyDown(Key.Period))
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            }
+
+            if (keyState.IsKeyDown(Key.Number1))
+            {
+                _bulletType = Bullet.BulletType.Straight;
+            }
+            if (keyState.IsKeyDown(Key.Number2))
+            {
+                _bulletType = Bullet.BulletType.Wave;
+            }
+            if (keyState.IsKeyDown(Key.Number3))
+            {
+                _bulletType = Bullet.BulletType.Seeker;
+            }
+            if (keyState.IsKeyDown(Key.Number4))
+            {
+                _bulletType = Bullet.BulletType.SeekerExtra;
+            }
+            if (keyState.IsKeyDown(Key.T))
+            {
+                _useFirstPerson = false;
+            }
+            if (keyState.IsKeyDown(Key.F))
+            {
+                _useFirstPerson = true;
+            }
+
+            if (keyState.IsKeyDown(Key.A))
+            {
+                _player.MoveLeft();
+            }
+            if (keyState.IsKeyDown(Key.D))
+            {
+                _player.MoveRight();
+            }
+            if (!_gameOver && keyState.IsKeyDown(Key.Space) && _lastKeyboardState.IsKeyUp(Key.Space))
+            {
+                var bullet = _gameObjectFactory.CreateBullet(_player.Position, _bulletType);
+                if (_bulletType == Bullet.BulletType.Seeker || _bulletType == Bullet.BulletType.SeekerExtra)
+                {
+                    var asteroids = _gameObjects.Where(x => x.GetType() == typeof(Asteroid)).ToList();
+                    bullet.SetTarget((Asteroid)asteroids[bullet.GameObjectNumber % asteroids.Count]);
+                    if (_useFirstPerson)
+                        _camera = new FirstPersonCamera(bullet);
+                    else
+                        _camera = new ThirdPersonCamera(bullet, new Vector3(-0.3f, -0.3f, 0.1f));
+                }
+                _lastBullet = bullet;
+                _gameObjects.Add(bullet);
+            }
+            _lastKeyboardState = keyState;
         }
-
-
-
-        public Florence.ClientAssembly.Graphics.ShaderProgram Get_texturedProgram()
+        protected override void OnRenderFrame(FrameEventArgs e)
         {
-            return _texturedProgram;
-        }
+            Title = $"{_title}: FPS:{1f / e.Time:0000.0}, obj:{_gameObjects.Count}, score:{_score}";
+            GL.ClearColor(Color.Black);// _backColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-        public Florence.ClientAssembly.Graphics.ShaderProgram Get_solidProgram()
-        {
-            return _solidProgram;
-        }
+            int lastProgram = -1;
+            foreach (var obj in _gameObjects)
+            {
+                var program = obj.Model.Program;
+                if (lastProgram != program)
+                    GL.UniformMatrix4(20, false, ref _projectionMatrix);
+                lastProgram = obj.Model.Program;
+                obj.Render(_camera);
 
+            }
+            SwapBuffers();
+        }
 
     }
 }

@@ -9,7 +9,7 @@ namespace Florence.ClientAssembly
     public class Data
     {
         static private Florence.ClientAssembly.Data_Control data_Control;
-        static private Florence.ClientAssembly.Game_Instance gameInstance;
+        //static private Florence.ClientAssembly.Game_Instance gameInstance;
         static private Florence.ClientAssembly.game_Instance.Settings settings;
         //byffers
         static private Florence.ClientAssembly.Inputs.Input_Instance input_Instnace;
@@ -26,8 +26,8 @@ namespace Florence.ClientAssembly
         {
             data_Control = null;
             
-            gameInstance = new Florence.ClientAssembly.Game_Instance();
-            while (gameInstance == null) { /* Wait while is created */ }
+            //gameInstance = new Florence.ClientAssembly.Game_Instance();
+            //while (gameInstance == null) { /* Wait while is created */ }
 
             settings = new Florence.ClientAssembly.game_Instance.Settings();
             while (settings == null) { /* Wait while is created */ }
@@ -70,10 +70,10 @@ namespace Florence.ClientAssembly
             return data_Control;
         }
 
-        public Florence.ClientAssembly.Game_Instance GetGame_Instance()
-        {
-            return gameInstance;
-        }
+        //public Florence.ClientAssembly.Game_Instance GetGame_Instance()
+        //{
+       //     return gameInstance;
+        //}
 
         public Florence.ClientAssembly.Inputs.Input_Instance GetInput_Instnace()
         {
