@@ -8,21 +8,21 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
     public abstract class AGameObject
     {
         public ARenderable Model => _model;
-        public Vector4 Position => _position;
-        public Vector4 Direction => _direction;
+        public Vector3 Position => _position;
+        public Vector3 Direction => _direction;
         public Vector3 Scale => _scale;
         private static int GameObjectCounter;
         public readonly int GameObjectNumber;
         protected ARenderable _model;
-        protected Vector4 _position;
-        protected Vector4 _direction;
-        protected Vector4 _rotation;
+        protected Vector3 _position;
+        protected Vector3 _direction;
+        protected Vector3 _rotation;
         protected float _velocity;
         protected Matrix4 _modelView;
         protected Vector3 _scale;
         public bool ToBeRemoved { get; set; }
 
-        public AGameObject(ARenderable model, Vector4 position, Vector4 direction, Vector4 rotation, float velocity)
+        public AGameObject(ARenderable model, Vector3 position, Vector3 direction, Vector3 rotation, float velocity)
         {
             _model = model;
             _position = position;
@@ -32,21 +32,10 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
             _scale = new Vector3(1);
             GameObjectNumber = GameObjectCounter++;
         }
-
-        public void SetScale(Vector3 scale)
-        {
-            _scale = scale;
-        }
-        public void SetPosition(Vector4 position)
-        {
-            _position = position;
-        }
         public virtual void Update(double time, double delta)
         {
             _position += _direction*(_velocity*(float) delta);
         }
-
-
         public virtual void Render(ICamera camera)
         {
             _model.Bind();
@@ -58,6 +47,56 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
             _modelView = r1*r2*r3*s*t2*camera.LookAtMatrix;
             GL.UniformMatrix4(21, false, ref _modelView);
             _model.Render();
+        }
+
+        public void Update_Rotation(Vector3 value)
+        {
+            float rot_X = Florence.ServerAssembly.Framework.GetGameServer().GetData().GetGame_Instance().Get_gameObjectFactory().Get_player().Get_Rotation().X + value.X;
+            if (rot_X > (float)(Math.PI / 180) * 180)
+            {
+                rot_X = (rot_X - (float)(Math.PI * 2));
+            }
+            if (rot_X <= (Math.PI / 180) * -180)
+            {
+                rot_X = (rot_X + (float)(Math.PI * 2));
+            }
+            float rot_Y = Florence.ServerAssembly.Framework.GetGameServer().GetData().GetGame_Instance().Get_gameObjectFactory().Get_player().Get_Rotation().Y + value.Y;
+            if (rot_Y > (float)(Math.PI / 180) * 180)
+            {
+                rot_Y = (rot_Y - (float)(Math.PI * 2));
+            }
+            if (rot_Y <= (Math.PI / 180) * -180)
+            {
+                rot_Y = (rot_Y + (float)(Math.PI * 2));
+            }
+            float rot_Z = Florence.ServerAssembly.Framework.GetGameServer().GetData().GetGame_Instance().Get_gameObjectFactory().Get_player().Get_Rotation().Z + value.Z;
+            if (rot_Z > (float)(Math.PI / 180) * 180)
+            {
+                rot_Z = (rot_Z - (float)(Math.PI * 2));
+            }
+            if (rot_Z <= (Math.PI / 180) * -180)
+            {
+                rot_Z = (rot_Z + (float)(Math.PI * 2));
+            }
+            Florence.ServerAssembly.Framework.GetGameServer().GetData().GetGame_Instance().Get_gameObjectFactory().Get_player().Set_rotation(new Vector3(rot_X, rot_Y, rot_Z));
+        }
+//get
+        public Vector3 Get_Rotation()
+        {
+            return _rotation;
+        }
+//set
+        public void SetScale(Vector3 scale)
+        {
+            _scale = scale;
+        }
+        public void SetPosition(Vector3 position)
+        {
+            _position = position;
+        }
+        public void Set_rotation(Vector3 scale)
+        {
+            _rotation = scale;
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Florence.ServerAssembly.game_Instance
+namespace ServerAssembly.GameInstance
 {
     public class Arena
     {

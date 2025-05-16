@@ -8,7 +8,7 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
     {
         private bool _moveLeft;
         private bool _moveRight;
-        public Spacecraft(ARenderable model, Vector4 position, Vector4 direction, Vector4 rotation, float velocity) 
+        public Spacecraft(ARenderable model, Vector3 position, Vector3 direction, Vector3 rotation, float velocity) 
             : base(model, position, direction, rotation, velocity)
         {
         }

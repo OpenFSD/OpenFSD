@@ -52,6 +52,10 @@ namespace Florence.ClientAssembly
         public void Create_And_Run_Graphics()
         {
             new Florence.ClientAssembly.Game_Instance().Run(144);
+            using (Florence.ClientAssembly.Game_Instance gameInstance = new Florence.ClientAssembly.Game_Instance())
+            {
+                gameInstance.Run(Florence.ClientAssembly.Framework.GetClient().GetData().GetSettings().Get_refreshRate());
+            }
         }
 
         public Florence.ClientAssembly.Execute_Control GetExecute_Control()

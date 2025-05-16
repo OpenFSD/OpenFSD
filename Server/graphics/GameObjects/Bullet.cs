@@ -12,7 +12,7 @@ namespace Florence.ServerAssembly.Graphics.GameObjects
         private BulletType _bulletType;
         private AGameObject _target;
         private double _life;
-        public Bullet(ARenderable model, Vector4 position, Vector4 direction, Vector4 rotation, float velocity, BulletType bulletType = BulletType.Straight) 
+        public Bullet(ARenderable model, Vector3 position, Vector3 direction, Vector3 rotation, float velocity, BulletType bulletType = BulletType.Straight) 
             : base(model, position, direction, rotation, velocity)
         {
             _bulletNumber = _bulletCounter++;

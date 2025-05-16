@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Florence.ClientAssembly.game_Instance
+namespace ClientAssembly.GameInstance
 {
-    public class Arena
+    internal class Player
     {
-        public Arena()
-        {   
-        
-        }
-        
     }
 }
